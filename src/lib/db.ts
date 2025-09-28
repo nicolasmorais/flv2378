@@ -122,7 +122,7 @@ const initialData = [
 export async function setupDatabase() {
     console.log("Setting up database...");
     try {
-        // Create table if it doesn't exist
+        // Create notes table if it doesn't exist
         await sql`
             CREATE TABLE IF NOT EXISTS notes (
                 id SERIAL PRIMARY KEY,
@@ -136,22 +136,35 @@ export async function setupDatabase() {
         `;
         console.log("Table 'notes' is ready.");
 
-        // Check if there is any data
-        const { rowCount } = await sql`SELECT * from notes`;
+        // Check if there is any data in notes
+        const { rowCount: notesRowCount } = await sql`SELECT * from notes`;
 
-        if (rowCount === 0) {
-            console.log("No data found. Seeding initial data...");
-            // Seed initial data
+        if (notesRowCount === 0) {
+            console.log("No data found in 'notes'. Seeding initial data...");
+            // Seed initial data for notes
             for (const note of initialData) {
                 await sql`
                     INSERT INTO notes (title, content, category, description, tags)
                     VALUES (${note.title}, ${note.content}, ${note.category}, ${note.description}, ${JSON.stringify(note.tags)})
                 `;
             }
-            console.log("Initial data seeded successfully.");
+            console.log("Initial data for 'notes' seeded successfully.");
         } else {
-            console.log("Database already contains data. Skipping seed.");
+            console.log("Table 'notes' already contains data. Skipping seed.");
         }
+
+        // Create accesses table if it doesn't exist
+        await sql`
+            CREATE TABLE IF NOT EXISTS accesses (
+                id SERIAL PRIMARY KEY,
+                link VARCHAR(255),
+                username VARCHAR(255),
+                password VARCHAR(255),
+                "createdAt" TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+            );
+        `;
+        console.log("Table 'accesses' is ready.");
+
 
     } catch (error) {
         console.error("Error setting up database:", error);
@@ -159,3 +172,5 @@ export async function setupDatabase() {
         // The app should still try to run.
     }
 }
+
+    

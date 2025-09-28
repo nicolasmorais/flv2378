@@ -4,7 +4,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { Home, Leaf, Apple, Carrot, CalendarDays, LogOut, Package, Scissors, Notebook } from 'lucide-react';
+import { Home, Leaf, Apple, Carrot, CalendarDays, LogOut, Package, Scissors, Notebook, KeyRound } from 'lucide-react';
 import {
   SidebarHeader,
   SidebarContent,
@@ -26,6 +26,7 @@ const menuItems = [
     { href: '/plus-cortes', label: 'Plus/Cortes', icon: Scissors },
     { href: '/preco-livre-diario', label: 'Preço Livre Diário', icon: CalendarDays },
     { href: '/anotacoes', label: 'Anotações', icon: Notebook },
+    { href: '/acessos', label: 'Acessos', icon: KeyRound },
 ];
 
 export default function AppSidebar() {
@@ -74,3 +75,5 @@ export default function AppSidebar() {
     </>
   );
 }
+
+    
