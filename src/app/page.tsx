@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { SidebarTrigger } from '@/components/ui/sidebar';
-import { PlusCircle, Copy, Check, MoreVertical, Edit, Trash2 } from 'lucide-react';
+import { PlusCircle, Copy, Check, MoreVertical, Edit, Trash2, RefreshCw } from 'lucide-react';
 import NoteForm from '@/components/note-form';
 import type { Note } from '@/lib/types';
 import { useNotesStore } from '@/hooks/use-notes-store';
@@ -27,6 +27,8 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
+import { resetDatabaseAction } from '@/app/actions';
+import { useToast } from '@/hooks/use-toast';
 
 type Category = 'Frutas' | 'Legumes e Verduras' | 'Outros';
 
@@ -137,7 +139,9 @@ export default function Home() {
   const [isNoteFormOpen, setNoteFormOpen] = useState(false);
   const [activeCategory, setActiveCategory] = useState<Category | null>(null);
   const [editingNote, setEditingNote] = useState<Note | undefined>(undefined);
-  const { notes, addNote, updateNote, deleteNote, isLoaded } = useNotesStore();
+  const { notes, addNote, updateNote, deleteNote, isLoaded, loadNotes } = useNotesStore();
+  const [isResetting, setIsResetting] = useState(false);
+  const { toast } = useToast();
 
   const handleAddNew = (category: Category) => {
     setActiveCategory(category);
@@ -180,6 +184,27 @@ export default function Home() {
       .sort((a, b) => a.title.localeCompare(b.title));
   };
   
+  const handleResetDatabase = async () => {
+    setIsResetting(true);
+    try {
+      await resetDatabaseAction();
+      await loadNotes(); // Recarrega as notas do store
+      toast({
+        title: "Banco de dados reiniciado",
+        description: "Os dados foram limpos e recarregados.",
+      });
+    } catch (error) {
+      console.error(error);
+      toast({
+        title: "Erro",
+        description: "Não foi possível reiniciar o banco de dados.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsResetting(false);
+    }
+  };
+
   return (
     <div className="flex flex-col h-screen">
        <header className="border-b bg-card backdrop-blur-sm sticky top-0 z-10 md:hidden">
@@ -194,7 +219,31 @@ export default function Home() {
 
       <main className="flex-1 overflow-auto">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <h1 className="text-2xl font-bold mb-6">Todos os Plus</h1>
+          <div className="flex items-center justify-between mb-6">
+            <h1 className="text-2xl font-bold">Todos os Plus</h1>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button variant="destructive" disabled={isResetting}>
+                  <RefreshCw className={`mr-2 h-4 w-4 ${isResetting ? 'animate-spin' : ''}`} />
+                  Limpar e Reiniciar Banco de Dados
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                  <AlertDialogHeader>
+                      <AlertDialogTitle>Você tem certeza?</AlertDialogTitle>
+                      <AlertDialogDescription>
+                          Essa ação irá apagar TODOS os dados permanentemente e recarregá-los com os valores iniciais. Itens adicionados ou editados por você serão perdidos.
+                      </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                      <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                      <AlertDialogAction onClick={handleResetDatabase} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+                          Sim, Reiniciar
+                      </AlertDialogAction>
+                  </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          </div>
           
           <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 mb-6">
             <CategoryCard 

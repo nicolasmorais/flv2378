@@ -21,6 +21,8 @@ const useNotesStoreInternal = create<NotesStore>((set, get) => ({
   setNotes: (notes) => set({ notes, isLoaded: true }),
   loadNotes: async () => {
     try {
+      // Força a recarga do zero, não exibindo dados cacheados.
+      set({ isLoaded: false }); 
       const notes = await fetchNotes();
       set({ notes, isLoaded: true });
     } catch (error) {
@@ -52,5 +54,5 @@ export const useNotesStore = () => {
         });
     }, []);
 
-    return { ...store, isLoaded: hasHydrated };
+    return { ...store, isLoaded: hasHydrated, loadNotes: store.loadNotes };
 };
