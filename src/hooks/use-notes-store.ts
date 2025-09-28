@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import type { Note } from '@/lib/types';
 import { encrypt, decrypt } from '@/lib/crypto';
+import { initialNotes } from '@/lib/initial-data';
 
 type StoredNote = Omit<Note, 'content'> & { content: string }; // content is encrypted
 
@@ -22,10 +23,17 @@ export const useNotesStore = () => {
           content: decrypt(note.content),
         }));
         setNotes(decryptedNotes);
+      } else {
+        // If no data in localStorage, initialize with initialNotes
+        setNotes(initialNotes);
+        persistNotes(initialNotes);
       }
     } catch (e) {
       console.error("Failed to load or parse notes from localStorage:", e);
       window.localStorage.removeItem(STORAGE_KEY);
+       // Fallback to initial data if localStorage is corrupt
+       setNotes(initialNotes);
+       persistNotes(initialNotes);
     }
     setIsLoaded(true);
   }, []);
