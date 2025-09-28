@@ -28,14 +28,15 @@ export default function AppSidebar() {
   return (
     <>
         <SidebarHeader>
-            <div className="flex items-center gap-2 p-2">
+            <div className="flex items-center justify-center gap-2 p-4">
                  <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 100 30"
-                    className="h-6 w-auto"
+                    viewBox="0 0 208 64"
+                    className="h-8 w-auto"
                     fill="currentColor"
                   >
-                    <text x="0" y="22" fontFamily="Arial, sans-serif" fontSize="24" fontWeight="bold">FLV</text>
+                    <path d="M23.8,5.4H1.5v53.2h22.3V5.4z M52.2,5.4L41,32l-11.2-26.6H5.3l29.4,41.9h0.1l29.4-41.9H52.2z M107.8,24.1c0-10.3-8.4-18.7-18.7-18.7c-10.3,0-18.7,8.4-18.7,18.7c0,10.3,8.4,18.7,18.7,18.7C99.4,42.8,107.8,34.4,107.8,24.1z M86.8,24.1c0-1.6,1.3-2.9,2.9-2.9s2.9,1.3,2.9,2.9s-1.3,2.9-2.9,2.9S86.8,25.7,86.8,24.1z"></path>
+                    <image href="https://storage.googleapis.com/stc-llm-testing/flv_logo.png" x="110" y="0" height="60" width="98" />
                   </svg>
             </div>
         </SidebarHeader>
