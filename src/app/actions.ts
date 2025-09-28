@@ -1,3 +1,4 @@
+
 'use server';
 
 import { 
@@ -102,8 +103,12 @@ export async function deleteNoteAction(id: string) {
 // Access actions
 export async function fetchAccesses(): Promise<Access[]> {
   try {
-    const { rows } = await sql<Access>`SELECT id, "systemName", link, username, password, "createdAt" FROM accesses`;
-    return rows;
+    const { rows } = await sql<Access>`SELECT id, "systemName", link, username, password, createdAt FROM accesses`;
+    return rows.map(row => ({
+      ...row,
+      systemName: row.systemName,
+      createdAt: row.createdAt
+    }));
   } catch (error) {
     console.error('Failed to fetch accesses:', error);
     if ((error as any).code === '42P01') {
@@ -182,3 +187,4 @@ export async function clearAndReseedDatabase() {
     return { success: false, error: 'Failed to clear and re-seed database.' };
   }
 }
+
