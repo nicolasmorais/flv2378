@@ -1,85 +1,56 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { create } from 'zustand';
 import type { Note } from '@/lib/types';
-import { encrypt, decrypt } from '@/lib/crypto';
-import { initialNotes } from '@/lib/initial-data';
+import { useEffect, useState } from 'react';
+import { fetchNotes, addNoteAction, updateNoteAction, deleteNoteAction } from '@/app/actions';
 
-type StoredNote = Omit<Note, 'content'> & { content: string }; // content is encrypted
+interface NotesStore {
+  notes: Note[];
+  isLoaded: boolean;
+  setNotes: (notes: Note[]) => void;
+  addNote: (note: Omit<Note, 'id' | 'createdAt'>) => Promise<void>;
+  updateNote: (id: string, note: Partial<Omit<Note, 'id' | 'createdAt'>>) => Promise<void>;
+  deleteNote: (id: string) => Promise<void>;
+  loadNotes: () => Promise<void>;
+}
 
-const STORAGE_KEY = 'copinote-notes';
+const useNotesStoreInternal = create<NotesStore>((set, get) => ({
+  notes: [],
+  isLoaded: false,
+  setNotes: (notes) => set({ notes, isLoaded: true }),
+  loadNotes: async () => {
+    try {
+      const notes = await fetchNotes();
+      set({ notes, isLoaded: true });
+    } catch (error) {
+      console.error("Failed to load notes:", error);
+      set({ isLoaded: true }); // Mark as loaded even if there's an error
+    }
+  },
+  addNote: async (note) => {
+    await addNoteAction(note);
+    await get().loadNotes();
+  },
+  updateNote: async (id, note) => {
+    await updateNoteAction(id, note);
+    await get().loadNotes();
+  },
+  deleteNote: async (id) => {
+    await deleteNoteAction(id);
+    await get().loadNotes();
+  },
+}));
 
 export const useNotesStore = () => {
-  const [notes, setNotes] = useState<Note[]>([]);
-  const [isLoaded, setIsLoaded] = useState(false);
+    const store = useNotesStoreInternal();
+    const [hasHydrated, setHasHydrated] = useState(false);
 
-  useEffect(() => {
-    try {
-      const item = window.localStorage.getItem(STORAGE_KEY);
-      if (item) {
-        const storedNotes: StoredNote[] = JSON.parse(item);
-        const decryptedNotes: Note[] = storedNotes.map(note => ({
-          ...note,
-          content: decrypt(note.content),
-        }));
-        setNotes(decryptedNotes);
-      } else {
-        // If no data in localStorage, initialize with initialNotes
-        setNotes(initialNotes);
-        persistNotes(initialNotes);
-      }
-    } catch (e) {
-      console.error("Failed to load or parse notes from localStorage:", e);
-      window.localStorage.removeItem(STORAGE_KEY);
-       // Fallback to initial data if localStorage is corrupt
-       setNotes(initialNotes);
-       persistNotes(initialNotes);
-    }
-    setIsLoaded(true);
-  }, []);
+    useEffect(() => {
+        store.loadNotes().then(() => {
+            setHasHydrated(true);
+        });
+    }, []);
 
-  const persistNotes = useCallback((notesToPersist: Note[]) => {
-    try {
-      const encryptedNotes: StoredNote[] = notesToPersist.map(note => ({
-        ...note,
-        content: encrypt(note.content),
-      }));
-      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(encryptedNotes));
-    } catch (e) {
-      console.error("Failed to persist notes to localStorage:", e);
-    }
-  }, []);
-
-  const addNote = useCallback((noteData: Omit<Note, 'id' | 'createdAt'>) => {
-    const newNote: Note = {
-      ...noteData,
-      id: crypto.randomUUID(),
-      createdAt: new Date().toISOString(),
-    };
-    setNotes(prevNotes => {
-      const updatedNotes = [...prevNotes, newNote];
-      persistNotes(updatedNotes);
-      return updatedNotes;
-    });
-  }, [persistNotes]);
-
-  const updateNote = useCallback((id: string, updatedData: Partial<Omit<Note, 'id' | 'createdAt'>>) => {
-    setNotes(prevNotes => {
-      const updatedNotes = prevNotes.map(note => 
-        note.id === id ? { ...note, ...updatedData } : note
-      );
-      persistNotes(updatedNotes);
-      return updatedNotes;
-    });
-  }, [persistNotes]);
-
-  const deleteNote = useCallback((id: string) => {
-    setNotes(prevNotes => {
-      const updatedNotes = prevNotes.filter(note => note.id !== id);
-      persistNotes(updatedNotes);
-      return updatedNotes;
-    });
-  }, [persistNotes]);
-
-  return { notes, addNote, updateNote, deleteNote, isLoaded };
+    return { ...store, isLoaded: hasHydrated };
 };

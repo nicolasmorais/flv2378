@@ -7,3 +7,5 @@ export interface Note {
   tags: string[];
   createdAt: string;
 }
+
+export type NoteInput = Omit<Note, 'id' | 'createdAt'>;
