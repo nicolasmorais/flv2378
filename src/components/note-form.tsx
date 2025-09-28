@@ -22,15 +22,12 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 
 const formSchema = z.object({
-  title: z.string().min(1, 'Title is required'),
-  content: z.string().min(1, 'Content is required'),
-  description: z.string().optional(),
-  category: z.string().optional(),
-  tags: z.string().optional(),
+  title: z.string().min(1, 'Nome é obrigatório'),
+  plu: z.string().optional(),
+  barcode: z.string().optional(),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -39,49 +36,43 @@ interface NoteFormProps {
   isOpen: boolean;
   onOpenChange: (isOpen: boolean) => void;
   note?: Note;
-  onSave: (data: Omit<Note, 'id' | 'createdAt'>) => void;
+  onSave: (data: Omit<Note, 'id' | 'createdAt' | 'category' | 'tags' | 'description' | 'content'> & { plu: string; barcode: string; }) => void;
+  activeCategory: string | null;
 }
 
-export default function NoteForm({ isOpen, onOpenChange, note, onSave }: NoteFormProps) {
+export default function NoteForm({ isOpen, onOpenChange, note, onSave, activeCategory }: NoteFormProps) {
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       title: '',
-      content: '',
-      description: '',
-      category: '',
-      tags: '',
+      plu: '',
+      barcode: '',
     },
   });
 
   useEffect(() => {
     if (note) {
+      const pluMatch = note.content.match(/PLU: (.*)/);
+      const barcodeMatch = note.content.match(/Barcode: (.*)/);
       form.reset({
         title: note.title,
-        content: note.content,
-        description: note.description,
-        category: note.category,
-        tags: note.tags.join(', '),
+        plu: pluMatch ? pluMatch[1] : '',
+        barcode: barcodeMatch ? barcodeMatch[1] : '',
       });
     } else {
       form.reset({
         title: '',
-        content: '',
-        description: '',
-        category: '',
-        tags: '',
+        plu: '',
+        barcode: '',
       });
     }
   }, [note, form, isOpen]);
 
   const onSubmit = (values: FormValues) => {
-    const tagsArray = values.tags ? values.tags.split(',').map(tag => tag.trim()).filter(Boolean) : [];
     onSave({
-        title: values.title,
-        content: values.content,
-        description: values.description || '',
-        category: values.category || '',
-        tags: tagsArray,
+      title: values.title,
+      plu: values.plu || '',
+      barcode: values.barcode || '',
     });
   };
 
@@ -89,9 +80,9 @@ export default function NoteForm({ isOpen, onOpenChange, note, onSave }: NoteFor
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[480px]">
         <DialogHeader>
-          <DialogTitle>{note ? 'Edit Note' : 'Add New Note'}</DialogTitle>
+          <DialogTitle>Cadastrar em {activeCategory}</DialogTitle>
           <DialogDescription>
-            Fill in the details for your note. Click save when you're done.
+            Preencha os dados abaixo.
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
@@ -101,9 +92,9 @@ export default function NoteForm({ isOpen, onOpenChange, note, onSave }: NoteFor
               name="title"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Title</FormLabel>
+                  <FormLabel>Nome</FormLabel>
                   <FormControl>
-                    <Input placeholder="e.g., GitHub Access Token" {...field} />
+                    <Input placeholder="Ex: Maçã Gala" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -111,25 +102,12 @@ export default function NoteForm({ isOpen, onOpenChange, note, onSave }: NoteFor
             />
             <FormField
               control={form.control}
-              name="content"
+              name="plu"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Content</FormLabel>
+                  <FormLabel>PLU</FormLabel>
                   <FormControl>
-                    <Textarea placeholder="Enter password, code, or secret here" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-             <FormField
-              control={form.control}
-              name="description"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Description</FormLabel>
-                  <FormControl>
-                    <Input placeholder="e.g., Token for personal projects" {...field} />
+                    <Input placeholder="Ex: 4016" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -137,33 +115,20 @@ export default function NoteForm({ isOpen, onOpenChange, note, onSave }: NoteFor
             />
             <FormField
               control={form.control}
-              name="category"
+              name="barcode"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Category</FormLabel>
+                  <FormLabel>Código de Barras</FormLabel>
                   <FormControl>
-                    <Input placeholder="e.g., Work, Personal, Social" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="tags"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Tags</FormLabel>
-                  <FormControl>
-                    <Input placeholder="e.g., api, token, frontend (comma-separated)" {...field} />
+                    <Input placeholder="Ex: 7891234567890" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
             <DialogFooter>
-              <Button type="button" variant="ghost" onClick={() => onOpenChange(false)}>Cancel</Button>
-              <Button type="submit">Save</Button>
+              <Button type="button" variant="ghost" onClick={() => onOpenChange(false)}>Cancelar</Button>
+              <Button type="submit">Salvar</Button>
             </DialogFooter>
           </form>
         </Form>

@@ -1,63 +1,45 @@
 'use client';
 
-import { useState, useMemo } from 'react';
-import { useNotesStore } from '@/hooks/use-notes-store';
-import type { Note } from '@/lib/types';
-import NoteCard from '@/components/note-card';
-import NoteForm from '@/components/note-form';
+import { useState } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Skeleton } from '@/components/ui/skeleton';
 import { SidebarTrigger } from '@/components/ui/sidebar';
+import { PlusCircle } from 'lucide-react';
+import NoteForm from '@/components/note-form';
+import type { Note } from '@/lib/types';
+import { useNotesStore } from '@/hooks/use-notes-store';
+
+type Category = 'Frutas' | 'Legumes e Verduras' | 'Outros';
 
 export default function Home() {
-  const { notes, addNote, updateNote, deleteNote, isLoaded } = useNotesStore();
-  const [searchTerm, setSearchTerm] = useState('');
-  const [activeCategory, setActiveCategory] = useState<string | null>(null);
-
   const [isNoteFormOpen, setNoteFormOpen] = useState(false);
-  const [editingNote, setEditingNote] = useState<Note | undefined>(undefined);
+  const [activeCategory, setActiveCategory] = useState<Category | null>(null);
+  const { addNote } = useNotesStore();
 
-  const categories = useMemo(() => {
-    const allCategories = notes.map(note => note.category).filter(Boolean);
-    return ['All', ...Array.from(new Set(allCategories))];
-  }, [notes]);
-
-  const filteredNotes = useMemo(() => {
-    return notes
-      .filter(note => {
-        const categoryMatch = activeCategory === 'All' || !activeCategory ? true : note.category === activeCategory;
-
-        const searchMatch = searchTerm
-          ? note.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            note.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            note.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            note.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()))
-          : true;
-
-        return categoryMatch && searchMatch;
-      })
-      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-  }, [notes, searchTerm, activeCategory]);
-
-  const handleEdit = (note: Note) => {
-    setEditingNote(note);
-    setNoteFormOpen(true);
-  };
-
-  const handleAddNew = () => {
-    setEditingNote(undefined);
+  const handleAddNew = (category: Category) => {
+    setActiveCategory(category);
     setNoteFormOpen(true);
   };
   
   const handleNoteFormClose = () => {
     setNoteFormOpen(false);
-    setEditingNote(undefined);
+    setActiveCategory(null);
+  };
+
+  const handleSaveNote = (noteData: Omit<Note, 'id' | 'createdAt' | 'category' | 'tags' | 'description'> & { plu: string; barcode: string }) => {
+    addNote({
+      title: noteData.title,
+      content: `PLU: ${noteData.plu}\nBarcode: ${noteData.barcode}`,
+      category: activeCategory || 'Outros',
+      description: '',
+      tags: [],
+    });
+    handleNoteFormClose();
   };
 
   return (
     <div className="flex flex-col h-screen">
-      <header className="border-b bg-card backdrop-blur-sm sticky top-0 z-10 md:hidden">
+       <header className="border-b bg-card backdrop-blur-sm sticky top-0 z-10 md:hidden">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex h-16 items-center justify-between">
             <div className="flex items-center gap-2">
@@ -67,85 +49,56 @@ export default function Home() {
         </div>
       </header>
 
-      <main className="flex-1 overflow-hidden">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 h-full flex flex-col">
-          <h1 className="text-2xl font-bold mb-4">Todos os Plus</h1>
-          <div className="flex-shrink-0">
-             <ScrollArea className="w-full whitespace-nowrap">
-              <div className="flex space-x-2 pb-4">
-                {categories.map(category => (
-                  <Button
-                    key={category}
-                    variant={activeCategory === category || (!activeCategory && category === 'All') ? 'secondary' : 'ghost'}
-                    size="sm"
-                    className="rounded-full"
-                    onClick={() => setActiveCategory(category === 'All' ? null : category)}
-                  >
-                    {category}
-                  </Button>
-                ))}
-              </div>
-            </ScrollArea>
-          </div>
+      <main className="flex-1 overflow-auto">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <h1 className="text-2xl font-bold mb-6">Todos os Plus</h1>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Frutas</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <Button className="w-full" onClick={() => handleAddNew('Frutas')}>
+                  <PlusCircle className="mr-2 h-4 w-4" />
+                  Cadastrar
+                </Button>
+              </CardContent>
+            </Card>
 
-          <ScrollArea className="flex-1 -mx-4">
-             <div className="px-4">
-              {!isLoaded && (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                  {[...Array(8)].map((_, i) => (
-                    <div key={i} className="p-4 border rounded-lg space-y-3">
-                       <Skeleton className="h-5 w-2/3" />
-                       <Skeleton className="h-4 w-1/2" />
-                       <Skeleton className="h-8 w-full" />
-                       <div className="flex gap-2 pt-2">
-                          <Skeleton className="h-5 w-16" />
-                          <Skeleton className="h-5 w-16" />
-                       </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-              {isLoaded && filteredNotes.length > 0 && (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                  {filteredNotes.map(note => (
-                    <NoteCard
-                      key={note.id}
-                      note={note}
-                      onEdit={() => handleEdit(note)}
-                      onDelete={() => deleteNote(note.id)}
-                    />
-                  ))}
-                </div>
-              )}
-              {isLoaded && filteredNotes.length === 0 && (
-                <div className="text-center py-20">
-                  <h3 className="text-xl font-semibold text-muted-foreground">
-                    {notes.length > 0 ? 'No notes match your search' : 'No notes yet'}
-                  </h3>
-                  <p className="text-muted-foreground mt-2">
-                    {notes.length > 0 ? 'Try a different search or filter.' : 'No notes yet'}
-                  </p>
-                </div>
-              )}
-             </div>
-          </ScrollArea>
+            <Card>
+              <CardHeader>
+                <CardTitle>Legumes e Verduras</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <Button className="w-full" onClick={() => handleAddNew('Legumes e Verduras')}>
+                  <PlusCircle className="mr-2 h-4 w-4" />
+                  Cadastrar
+                </Button>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Outros</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <Button className="w-full" onClick={() => handleAddNew('Outros')}>
+                  <PlusCircle className="mr-2 h-4 w-4" />
+                  Cadastrar
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
         </div>
       </main>
 
       <NoteForm
         isOpen={isNoteFormOpen}
         onOpenChange={handleNoteFormClose}
-        note={editingNote}
-        onSave={noteData => {
-          if (editingNote) {
-            updateNote(editingNote.id, noteData);
-          } else {
-            addNote(noteData);
-          }
-          handleNoteFormClose();
-        }}
+        onSave={handleSaveNote}
+        activeCategory={activeCategory}
       />
-      
     </div>
   );
 }
