@@ -1,15 +1,32 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { SidebarTrigger } from '@/components/ui/sidebar';
-import { PlusCircle, Copy, Check } from 'lucide-react';
+import { PlusCircle, Copy, Check, MoreVertical, Edit, Trash2 } from 'lucide-react';
 import NoteForm from '@/components/note-form';
 import type { Note } from '@/lib/types';
 import { useNotesStore } from '@/hooks/use-notes-store';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Skeleton } from '@/components/ui/skeleton';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
 
 type Category = 'Frutas' | 'Legumes e Verduras' | 'Outros';
 
@@ -18,11 +35,15 @@ const CategoryCard = ({
   notes, 
   isLoading, 
   onAddNew,
+  onEdit,
+  onDelete,
 }: { 
   category: Category;
   notes: Note[];
   isLoading: boolean;
   onAddNew: (category: Category) => void;
+  onEdit: (note: Note) => void;
+  onDelete: (id: string) => void;
 }) => {
   const [copiedPlu, setCopiedPlu] = useState<string | null>(null);
 
@@ -58,9 +79,46 @@ const CategoryCard = ({
                   <p className="font-medium text-sm mr-2 truncate">
                     {note.title} - <span className="font-mono">{plu}</span>
                   </p>
-                  <Button variant="ghost" size="icon" className="h-7 w-7 flex-shrink-0" onClick={() => handleCopy(plu)}>
-                    {copiedPlu === plu ? <Check className="h-4 w-4 text-green-500" /> : <Copy className="h-4 w-4" />}
-                  </Button>
+                  <div className="flex items-center gap-1">
+                    <Button variant="ghost" size="icon" className="h-7 w-7 flex-shrink-0" onClick={() => handleCopy(plu)}>
+                      {copiedPlu === plu ? <Check className="h-4 w-4 text-green-500" /> : <Copy className="h-4 w-4" />}
+                    </Button>
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" size="icon" className="h-7 w-7 flex-shrink-0">
+                                <MoreVertical className="h-4 w-4" />
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                            <DropdownMenuItem onClick={() => onEdit(note)}>
+                                <Edit className="mr-2 h-4 w-4" />
+                                <span>Editar</span>
+                            </DropdownMenuItem>
+                            <AlertDialog>
+                                <AlertDialogTrigger asChild>
+                                    <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                                        <Trash2 className="mr-2 h-4 w-4 text-destructive" />
+                                        <span className="text-destructive">Deletar</span>
+                                    </DropdownMenuItem>
+                                </AlertDialogTrigger>
+                                <AlertDialogContent>
+                                    <AlertDialogHeader>
+                                        <AlertDialogTitle>Você tem certeza?</AlertDialogTitle>
+                                        <AlertDialogDescription>
+                                            Essa ação não pode ser desfeita. Isso irá deletar o item permanentemente.
+                                        </AlertDialogDescription>
+                                    </AlertDialogHeader>
+                                    <AlertDialogFooter>
+                                        <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                                        <AlertDialogAction onClick={() => onDelete(note.id)} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+                                            Deletar
+                                        </AlertDialogAction>
+                                    </AlertDialogFooter>
+                                </AlertDialogContent>
+                            </AlertDialog>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
                 </div>
                )
             })}
@@ -87,6 +145,12 @@ export default function Home() {
     setNoteFormOpen(true);
   };
   
+  const handleEdit = (note: Note) => {
+    setActiveCategory(note.category as Category);
+    setEditingNote(note);
+    setNoteFormOpen(true);
+  };
+
   const handleNoteFormClose = () => {
     setNoteFormOpen(false);
     setActiveCategory(null);
@@ -138,18 +202,24 @@ export default function Home() {
               notes={filterNotesByCategory('Frutas')}
               isLoading={!isLoaded}
               onAddNew={handleAddNew}
+              onEdit={handleEdit}
+              onDelete={deleteNote}
             />
             <CategoryCard 
               category="Legumes e Verduras"
               notes={filterNotesByCategory('Legumes e Verduras')}
               isLoading={!isLoaded}
               onAddNew={handleAddNew}
+              onEdit={handleEdit}
+              onDelete={deleteNote}
             />
             <CategoryCard 
               category="Outros"
               notes={filterNotesByCategory('Outros')}
               isLoading={!isLoaded}
               onAddNew={handleAddNew}
+              onEdit={handleEdit}
+              onDelete={deleteNote}
             />
           </div>
         </div>
