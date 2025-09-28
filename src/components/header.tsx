@@ -3,6 +3,7 @@
 import { ShieldCheck, Search, Plus, Sparkles } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { SidebarTrigger } from '@/components/ui/sidebar';
 
 interface AppHeaderProps {
   searchTerm: string;
@@ -22,8 +23,9 @@ export default function AppHeader({
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           <div className="flex items-center gap-2">
+            <SidebarTrigger className="md:hidden" />
             <ShieldCheck className="h-7 w-7 text-primary-foreground bg-primary/80 p-1 rounded-md" />
-            <h1 className="text-xl font-bold tracking-tight">CopiNote</h1>
+            <h1 className="text-xl font-bold tracking-tight hidden sm:block">CopiNote</h1>
           </div>
           <div className="flex flex-1 items-center justify-center px-4 sm:px-8 lg:px-16">
             <div className="w-full max-w-md relative">

@@ -68,6 +68,7 @@ export default function Home() {
 
       <main className="flex-1 overflow-hidden">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 h-full flex flex-col">
+          <h1 className="text-2xl font-bold mb-4">Todos os Plus</h1>
           <div className="flex-shrink-0">
              <ScrollArea className="w-full whitespace-nowrap">
               <div className="flex space-x-2 pb-4">
