@@ -28,8 +28,8 @@ body {
     --input: 145 20% 85%;
     --ring: 145 67% 30%;
     --radius: 0.5rem;
-    --sidebar-background: 145 67% 20%;
-    --sidebar-foreground: 48 55% 94%;
+    --sidebar-background: 43 94% 94%;
+    --sidebar-foreground: 145 67% 20%;
     --sidebar-primary: 88 57% 59%;
     --sidebar-primary-foreground: 145 67% 15%;
     --sidebar-accent: 145 67% 25%;
@@ -57,8 +57,8 @@ body {
     --border: 240 4% 16%;
     --input: 240 4% 16%;
     --ring: 145 67% 30%;
-    --sidebar-background: 145 80% 10%;
-    --sidebar-foreground: 48 55% 94%;
+    --sidebar-background: 43 94% 94%;
+    --sidebar-foreground: 145 80% 10%;
     --sidebar-primary: 88 57% 59%;
     --sidebar-primary-foreground: 145 67% 15%;
     --sidebar-accent: 145 67% 25%;
