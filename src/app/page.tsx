@@ -76,13 +76,15 @@ const CategoryCard = ({
                const plu = pluMatch ? pluMatch[1].trim() : '';
                return (
                 <div key={note.id} className="flex items-center justify-between gap-2 rounded-md border bg-muted/50 p-2">
-                  <p className="font-medium text-sm mr-2 truncate">
-                    {note.title} - <span className="font-mono">{plu}</span>
-                  </p>
-                  <div className="flex items-center gap-1">
+                  <div className="flex items-center gap-2 truncate">
                     <Button variant="ghost" size="icon" className="h-7 w-7 flex-shrink-0" onClick={() => handleCopy(plu)}>
                       {copiedPlu === plu ? <Check className="h-4 w-4 text-green-500" /> : <Copy className="h-4 w-4" />}
                     </Button>
+                    <p className="font-medium text-sm truncate">
+                      {note.title} - <span className="font-mono">{plu}</span>
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-1">
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button variant="ghost" size="icon" className="h-7 w-7 flex-shrink-0">
