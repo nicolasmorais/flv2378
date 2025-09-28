@@ -30,7 +30,14 @@ const useAccessStoreInternal = create<AccessesStoreState>((set, get) => ({
     }
   },
   addAccess: async (access) => {
-    await addAccessAction(access);
+    // Ensure systemName is passed to the action
+    const accessData = {
+        systemName: access.systemName,
+        link: access.link,
+        username: access.username,
+        password: access.password,
+    };
+    await addAccessAction(accessData);
     await get().loadAccesses();
   },
   updateAccess: async (id, access) => {
@@ -75,5 +82,3 @@ export const useAccessStore = () => {
   
   return { ...state, ...actions };
 };
-
-    

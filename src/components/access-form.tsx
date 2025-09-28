@@ -26,6 +26,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 
 const formSchema = z.object({
+  systemName: z.string().min(1, 'Nome do Sistema é obrigatório'),
   link: z.string().url('Por favor, insira uma URL válida.').min(1, 'Link é obrigatório'),
   username: z.string().min(1, 'Usuário é obrigatório'),
   password: z.string().min(1, 'Senha é obrigatória'),
@@ -44,6 +45,7 @@ export default function AccessForm({ isOpen, onOpenChange, access, onSave }: Acc
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      systemName: '',
       link: '',
       username: '',
       password: '',
@@ -54,12 +56,14 @@ export default function AccessForm({ isOpen, onOpenChange, access, onSave }: Acc
     if (isOpen) {
       if (access) {
         form.reset({
+          systemName: access.systemName,
           link: access.link,
           username: access.username,
           password: access.password,
         });
       } else {
         form.reset({
+          systemName: '',
           link: 'https://',
           username: '',
           password: '',
@@ -83,6 +87,19 @@ export default function AccessForm({ isOpen, onOpenChange, access, onSave }: Acc
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 py-4">
+             <FormField
+              control={form.control}
+              name="systemName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Nome do Sistema</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Ex: Sistema de Vendas" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <FormField
               control={form.control}
               name="link"
@@ -132,5 +149,3 @@ export default function AccessForm({ isOpen, onOpenChange, access, onSave }: Acc
     </Dialog>
   );
 }
-
-    

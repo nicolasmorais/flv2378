@@ -157,6 +157,7 @@ export async function setupDatabase() {
         await sql`
             CREATE TABLE IF NOT EXISTS accesses (
                 id SERIAL PRIMARY KEY,
+                "systemName" VARCHAR(255),
                 link VARCHAR(255),
                 username VARCHAR(255),
                 password VARCHAR(255),
@@ -172,5 +173,3 @@ export async function setupDatabase() {
         // The app should still try to run.
     }
 }
-
-    

@@ -115,6 +115,7 @@ export default function AcessosPage() {
                     <CardHeader>
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
+                             <CardTitle className="text-lg">{access.systemName}</CardTitle>
                              <p className="text-xs text-muted-foreground pt-1">
                                 {new Date(access.createdAt).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' })}
                             </p>
@@ -188,5 +189,3 @@ export default function AcessosPage() {
     </div>
   );
 }
-
-    

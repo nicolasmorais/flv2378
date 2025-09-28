@@ -12,6 +12,7 @@ export type NoteInput = Omit<Note, 'id' | 'createdAt'>;
 
 export interface Access {
   id: string;
+  systemName: string;
   link: string;
   username: string;
   password: string;
@@ -19,5 +20,3 @@ export interface Access {
 }
 
 export type AccessInput = Omit<Access, 'id' | 'createdAt'>;
-
-    

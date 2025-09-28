@@ -102,7 +102,7 @@ export async function deleteNoteAction(id: string) {
 // Access actions
 export async function fetchAccesses(): Promise<Access[]> {
   try {
-    const { rows } = await sql<Access>`SELECT * FROM accesses`;
+    const { rows } = await sql<Access>`SELECT id, "systemName", link, username, password, "createdAt" FROM accesses`;
     return rows;
   } catch (error) {
     console.error('Failed to fetch accesses:', error);
@@ -117,8 +117,8 @@ export async function fetchAccesses(): Promise<Access[]> {
 export async function addAccessAction(access: Omit<Access, 'id' | 'createdAt'>) {
   try {
     await sql`
-      INSERT INTO accesses (link, username, password)
-      VALUES (${access.link}, ${access.username}, ${access.password})
+      INSERT INTO accesses ("systemName", link, username, password)
+      VALUES (${access.systemName}, ${access.link}, ${access.username}, ${access.password})
     `;
     revalidatePath('/acessos');
   } catch (error) {
@@ -131,7 +131,7 @@ export async function updateAccessAction(id: string, access: Partial<Omit<Access
   try {
     await sql`
       UPDATE accesses
-      SET link = ${access.link}, username = ${access.username}, password = ${access.password}
+      SET "systemName" = ${access.systemName}, link = ${access.link}, username = ${access.username}, password = ${access.password}
       WHERE id = ${id}
     `;
     revalidatePath('/acessos');
@@ -182,5 +182,3 @@ export async function clearAndReseedDatabase() {
     return { success: false, error: 'Failed to clear and re-seed database.' };
   }
 }
-
-    
