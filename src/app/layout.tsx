@@ -35,6 +35,9 @@ export default function RootLayout({
   if (!isAuthLoaded || !isSetupDone) {
     return (
         <html lang="en" suppressHydrationWarning>
+            <head>
+                <title>FLV 2378</title>
+            </head>
             <body>
                 <div className="flex items-center justify-center h-screen">
                     <div className="text-2xl font-semibold">Carregando...</div>
@@ -47,6 +50,9 @@ export default function RootLayout({
   if (!isAuthenticated || pathname === '/login') {
       return (
           <html lang="en" suppressHydrationWarning>
+              <head>
+                <title>FLV 2378</title>
+              </head>
               <body>
                   {children}
                   <Toaster />
@@ -58,6 +64,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        <title>FLV 2378</title>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
