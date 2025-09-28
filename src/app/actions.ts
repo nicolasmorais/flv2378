@@ -24,7 +24,7 @@ export async function generatePasswordAction(input: GenerateStrongPasswordInput)
 // Note actions
 export async function fetchNotes(): Promise<Note[]> {
   try {
-    const { rows } = await sql<Note>`SELECT * FROM notes`;
+    const { rows } = await sql<Note>`SELECT * FROM notes ORDER BY "createdAt" DESC`;
     return rows;
   } catch (error) {
     console.error('Failed to fetch notes:', error);
@@ -40,7 +40,7 @@ export async function addNoteAction(note: Omit<Note, 'id' | 'createdAt' >) {
   try {
     await sql`
       INSERT INTO notes (title, content, category, description, tags)
-      VALUES (${note.title}, ${note.content}, ${note.category}, ${note.description}, ${JSON.stringify(note.tags)})
+      VALUES (${note.title}, ${note.content}, ${note.category}, ${note.description || ''}, ${JSON.stringify(note.tags || [])})
     `;
     revalidatePath('/');
     revalidatePath('/frutas');
@@ -103,12 +103,8 @@ export async function deleteNoteAction(id: string) {
 // Access actions
 export async function fetchAccesses(): Promise<Access[]> {
   try {
-    const { rows } = await sql<Access>`SELECT id, "systemName", link, username, password, createdAt FROM accesses`;
-    return rows.map(row => ({
-      ...row,
-      systemName: row.systemName,
-      createdAt: row.createdAt
-    }));
+    const { rows } = await sql<Access>`SELECT id, "systemName", link, username, password, "createdAt" FROM accesses ORDER BY "createdAt" DESC`;
+    return rows;
   } catch (error) {
     console.error('Failed to fetch accesses:', error);
     if ((error as any).code === '42P01') {
@@ -187,4 +183,3 @@ export async function clearAndReseedDatabase() {
     return { success: false, error: 'Failed to clear and re-seed database.' };
   }
 }
-
