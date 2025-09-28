@@ -1,22 +1,60 @@
-import type {Metadata} from 'next';
+
+'use client';
+
+import { useEffect, useState } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster"
 import { SidebarProvider, Sidebar, SidebarInset } from '@/components/ui/sidebar';
 import AppSidebar from '@/components/app-sidebar';
+import { useAuthStore } from '@/hooks/use-auth-store';
 import { setupDatabase } from '@/lib/db';
 
-
-export const metadata: Metadata = {
-  title: 'CopiNote',
-  description: 'Minimalist notes for passwords and codes',
-};
-
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  await setupDatabase();
+  const { isAuthenticated, isAuthLoaded } = useAuthStore();
+  const router = useRouter();
+  const pathname = usePathname();
+  const [isSetupDone, setIsSetupDone] = useState(false);
+
+  useEffect(() => {
+    setupDatabase().then(() => setIsSetupDone(true));
+  }, []);
+
+  useEffect(() => {
+    if (isAuthLoaded && isSetupDone) {
+      if (!isAuthenticated && pathname !== '/login') {
+        router.replace('/login');
+      }
+    }
+  }, [isAuthenticated, isAuthLoaded, isSetupDone, pathname, router]);
+
+  if (!isAuthLoaded || !isSetupDone) {
+    return (
+        <html lang="en" suppressHydrationWarning>
+            <body>
+                <div className="flex items-center justify-center h-screen">
+                    <div className="text-2xl font-semibold">Carregando...</div>
+                </div>
+            </body>
+        </html>
+    );
+  }
+
+  if (!isAuthenticated || pathname === '/login') {
+      return (
+          <html lang="en" suppressHydrationWarning>
+              <body>
+                  {children}
+                  <Toaster />
+              </body>
+          </html>
+      );
+  }
+
   return (
     <html lang="en" suppressHydrationWarning>
       <head>

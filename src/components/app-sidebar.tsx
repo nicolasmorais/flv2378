@@ -1,3 +1,4 @@
+
 'use client';
 
 import Link from 'next/link';
@@ -14,6 +15,7 @@ import {
   SidebarGroup,
   SidebarGroupLabel
 } from '@/components/ui/sidebar';
+import { useAuthStore } from '@/hooks/use-auth-store';
 
 const menuItems = [
     { href: '/', label: 'Todos os Plus', icon: Home },
@@ -28,6 +30,7 @@ const menuItems = [
 
 export default function AppSidebar() {
   const pathname = usePathname();
+  const { logout } = useAuthStore();
 
   return (
     <>
@@ -61,7 +64,7 @@ export default function AppSidebar() {
         <SidebarFooter>
             <SidebarMenu>
                 <SidebarMenuItem>
-                    <SidebarMenuButton>
+                    <SidebarMenuButton onClick={logout}>
                         <LogOut className="h-4 w-4" />
                         <span>Sair</span>
                     </SidebarMenuButton>
