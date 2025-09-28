@@ -33,8 +33,8 @@ export default function AppSidebar() {
                 <Image 
                     src="https://iv2jb3repd5xzuuy.public.blob.vercel-storage.com/ChatGPT%20Image%2027%20de%20set.%20de%202025%2C%2023_53_23%20%281%29-P2FGpUXiJ03U8Gc6zcn80QicOZqucr.png" 
                     alt="FLV Logo"
-                    width={140}
-                    height={40}
+                    width={180}
+                    height={60}
                 />
             </div>
         </SidebarHeader>
