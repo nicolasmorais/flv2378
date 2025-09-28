@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { Home, Leaf, Apple, Carrot, CalendarDays, LogOut } from 'lucide-react';
 import {
@@ -28,16 +29,13 @@ export default function AppSidebar() {
   return (
     <>
         <SidebarHeader>
-            <div className="flex items-center justify-center gap-2 p-4">
-                 <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 208 64"
-                    className="h-8 w-auto"
-                    fill="currentColor"
-                  >
-                    <path d="M23.8,5.4H1.5v53.2h22.3V5.4z M52.2,5.4L41,32l-11.2-26.6H5.3l29.4,41.9h0.1l29.4-41.9H52.2z M107.8,24.1c0-10.3-8.4-18.7-18.7-18.7c-10.3,0-18.7,8.4-18.7,18.7c0,10.3,8.4,18.7,18.7,18.7C99.4,42.8,107.8,34.4,107.8,24.1z M86.8,24.1c0-1.6,1.3-2.9,2.9-2.9s2.9,1.3,2.9,2.9s-1.3,2.9-2.9,2.9S86.8,25.7,86.8,24.1z"></path>
-                    <image href="https://storage.googleapis.com/stc-llm-testing/flv_logo.png" x="110" y="0" height="60" width="98" />
-                  </svg>
+            <div className="flex items-center justify-center p-4">
+                <Image 
+                    src="https://iv2jb3repd5xzuuy.public.blob.vercel-storage.com/ChatGPT%20Image%2027%20de%20set.%20de%202025%2C%2023_53_23%20%281%29-P2FGpUXiJ03U8Gc6zcn80QicOZqucr.png" 
+                    alt="FLV Logo"
+                    width={140}
+                    height={40}
+                />
             </div>
         </SidebarHeader>
         <SidebarContent>
