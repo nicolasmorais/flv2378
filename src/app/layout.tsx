@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster"
-import { SidebarProvider, Sidebar, SidebarInset } from '@/components/ui/sidebar';
+import { SidebarProvider, Sidebar, SidebarInset, SidebarTrigger } from '@/components/ui/sidebar';
 import AppSidebar from '@/components/app-sidebar';
 import { useAuthStore } from '@/hooks/use-auth-store';
 import { setupDatabase } from '@/lib/db';
@@ -68,6 +68,15 @@ export default function RootLayout({
                 <AppSidebar />
             </Sidebar>
             <SidebarInset>
+                <header className="border-b bg-card backdrop-blur-sm sticky top-0 z-10 md:hidden">
+                    <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+                        <div className="flex h-16 items-center justify-between">
+                        <div className="flex items-center gap-2">
+                            <SidebarTrigger />
+                        </div>
+                        </div>
+                    </div>
+                </header>
                 {children}
             </SidebarInset>
         </SidebarProvider>

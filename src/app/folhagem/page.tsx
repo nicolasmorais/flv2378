@@ -7,7 +7,6 @@ import NoteForm from '@/components/note-form';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Skeleton } from '@/components/ui/skeleton';
-import { SidebarTrigger } from '@/components/ui/sidebar';
 import { PlusCircle, Copy, Check, MoreVertical, Edit, Trash2 } from 'lucide-react';
 import {
   DropdownMenu,
@@ -79,15 +78,6 @@ export default function FolhagemPage() {
 
   return (
     <div className="flex flex-col h-screen">
-       <header className="border-b bg-card backdrop-blur-sm sticky top-0 z-10 md:hidden">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex h-16 items-center justify-between">
-            <div className="flex items-center gap-2">
-                <SidebarTrigger />
-            </div>
-            </div>
-        </div>
-      </header>
       <main className="flex-1 overflow-auto">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 h-full flex flex-col">
           <div className="flex items-center justify-between mb-6">

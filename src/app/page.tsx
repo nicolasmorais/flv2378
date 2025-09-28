@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { SidebarTrigger } from '@/components/ui/sidebar';
 import { PlusCircle, Copy, Check, MoreVertical, Edit, Trash2, RotateCcw } from 'lucide-react';
 import NoteForm from '@/components/note-form';
 import type { Note } from '@/lib/types';
@@ -195,16 +194,6 @@ export default function Home() {
 
   return (
     <div className="flex flex-col h-screen">
-       <header className="border-b bg-card backdrop-blur-sm sticky top-0 z-10 md:hidden">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex h-16 items-center justify-between">
-            <div className="flex items-center gap-2">
-                <SidebarTrigger />
-            </div>
-            </div>
-        </div>
-      </header>
-
       <main className="flex-1 overflow-auto">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center justify-between mb-6">
@@ -287,5 +276,3 @@ export default function Home() {
     </div>
   );
 }
-
-    
