@@ -26,8 +26,6 @@ export async function fetchNotes(): Promise<Note[]> {
     return rows;
   } catch (error) {
     console.error('Failed to fetch notes:', error);
-    // If the table does not exist, it will throw an error.
-    // We can return an empty array in this case.
     if ((error as any).code === '42P01') {
       console.log("Table 'notes' not found. Returning empty array.");
       return [];
@@ -48,6 +46,8 @@ export async function addNoteAction(note: Omit<Note, 'id' | 'createdAt' >) {
     revalidatePath('/verduras-legumes');
     revalidatePath('/plus-pacotes');
     revalidatePath('/plus-cortes');
+    revalidatePath('/preco-livre-diario');
+    revalidatePath('/anotacoes');
   } catch (error) {
     console.error('Failed to add note:', error);
     throw new Error('Failed to add note.');
@@ -67,6 +67,8 @@ export async function updateNoteAction(id: string, note: Partial<Omit<Note, 'id'
         revalidatePath('/verduras-legumes');
         revalidatePath('/plus-pacotes');
         revalidatePath('/plus-cortes');
+        revalidatePath('/preco-livre-diario');
+        revalidatePath('/anotacoes');
     } catch (error) {
         console.error('Failed to update note:', error);
         throw new Error('Failed to update note.');
@@ -85,6 +87,8 @@ export async function deleteNoteAction(id: string) {
         revalidatePath('/verduras-legumes');
         revalidatePath('/plus-pacotes');
         revalidatePath('/plus-cortes');
+        revalidatePath('/preco-livre-diario');
+        revalidatePath('/anotacoes');
     } catch (error) {
         console.error('Failed to delete note:', error);
         throw new Error('Failed to delete note.');
@@ -97,7 +101,6 @@ export async function clearAndReseedDatabase() {
     await sql`DROP TABLE IF EXISTS notes`;
     console.log("Table 'notes' dropped.");
     
-    // Re-run setup to create the table and seed it
     await setupDatabase();
 
     revalidatePath('/');
@@ -106,6 +109,8 @@ export async function clearAndReseedDatabase() {
     revalidatePath('/verduras-legumes');
     revalidatePath('/plus-pacotes');
     revalidatePath('/plus-cortes');
+    revalidatePath('/preco-livre-diario');
+    revalidatePath('/anotacoes');
     
     return { success: true };
   } catch (error) {

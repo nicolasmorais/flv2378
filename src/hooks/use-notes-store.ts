@@ -13,6 +13,7 @@ interface NotesStore {
   updateNote: (id: string, note: Partial<Omit<Note, 'id' | 'createdAt'>>) => Promise<void>;
   deleteNote: (id: string) => Promise<void>;
   loadNotes: () => Promise<void>;
+  getAnnotations: () => Note[];
 }
 
 const useNotesStoreInternal = create<NotesStore>((set, get) => ({
@@ -21,13 +22,12 @@ const useNotesStoreInternal = create<NotesStore>((set, get) => ({
   setNotes: (notes) => set({ notes, isLoaded: true }),
   loadNotes: async () => {
     try {
-      // Força a recarga do zero, não exibindo dados cacheados.
       set({ isLoaded: false }); 
       const notes = await fetchNotes();
       set({ notes, isLoaded: true });
     } catch (error) {
       console.error("Failed to load notes:", error);
-      set({ isLoaded: true }); // Mark as loaded even if there's an error
+      set({ isLoaded: true });
     }
   },
   addNote: async (note) => {
@@ -42,6 +42,9 @@ const useNotesStoreInternal = create<NotesStore>((set, get) => ({
     await deleteNoteAction(id);
     await get().loadNotes();
   },
+  getAnnotations: () => {
+    return get().notes.filter(note => note.category === 'Anotação').sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+  }
 }));
 
 export const useNotesStore = () => {
@@ -57,6 +60,10 @@ export const useNotesStore = () => {
     const loadNotes = async () => {
         await store.loadNotes();
     }
+    
+    const getAnnotations = () => {
+        return store.getAnnotations();
+    }
 
-    return { ...store, isLoaded: hasHydrated, loadNotes };
+    return { ...store, isLoaded: hasHydrated, loadNotes, getAnnotations };
 };
