@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { SidebarTrigger } from '@/components/ui/sidebar';
-import { PlusCircle, Copy, Check, MoreVertical, Edit, Trash2 } from 'lucide-react';
+import { PlusCircle, Copy, Check, MoreVertical, Edit, Trash2, RotateCcw } from 'lucide-react';
 import NoteForm from '@/components/note-form';
 import type { Note } from '@/lib/types';
 import { useNotesStore } from '@/hooks/use-notes-store';
@@ -178,8 +178,13 @@ export default function Home() {
   };
 
   const handleClearDatabase = async () => {
-    await clearAndReseedDatabase();
-    await loadNotes();
+    const result = await clearAndReseedDatabase();
+    if (result.success) {
+      await loadNotes();
+    } else {
+      // Handle error, maybe show a toast
+      console.error(result.error);
+    }
   };
 
   const filterNotesByCategory = (category: Category) => {
@@ -206,7 +211,9 @@ export default function Home() {
             <h1 className="text-2xl font-bold">Todos os Plus</h1>
             <AlertDialog>
               <AlertDialogTrigger asChild>
-                <Button variant="destructive">Limpar e Reiniciar Banco de Dados</Button>
+                <Button variant="destructive" size="icon">
+                  <RotateCcw className="h-4 w-4" />
+                </Button>
               </AlertDialogTrigger>
               <AlertDialogContent>
                 <AlertDialogHeader>
@@ -280,3 +287,5 @@ export default function Home() {
     </div>
   );
 }
+
+    
