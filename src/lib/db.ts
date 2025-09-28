@@ -84,7 +84,34 @@ const initialData = [
   { title: 'TOMATE CEREJA AMARELO', content: 'PLU: 337418\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
   { title: 'TOMATE GRAPE GREEN KG', content: 'PLU: 337619\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
   { title: 'TOMATE GRAPE', content: 'PLU: 337617\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
-  { title: 'TOMATE CEREJA RAMA GNEL', content: 'PLU: 337618\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] }
+  { title: 'TOMATE CEREJA RAMA GNEL', content: 'PLU: 337618\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
+  
+  // Plus/Cortes
+  { title: 'MELANCIA CORTE', content: 'PLU: 93521\nBarcode: ', category: 'Plus/Cortes', description: '', tags: [] },
+  { title: 'COCO SECO QUEBRADO', content: 'PLU: 352048\nBarcode: ', category: 'Plus/Cortes', description: '', tags: [] },
+  { title: 'MELÃO REI CORTE', content: 'PLU: 25522\nBarcode: ', category: 'Plus/Cortes', description: '', tags: [] },
+  { title: 'MELÃO AMARELO CORTE', content: 'PLU: 339117\nBarcode: ', category: 'Plus/Cortes', description: '', tags: [] },
+  { title: 'MAMÃO FORMOSA CORTE', content: 'PLU: 84444\nBarcode: ', category: 'Plus/Cortes', description: '', tags: [] },
+  { title: 'MELANCIA BABY CORTE', content: 'PLU: 39246\nBarcode: ', category: 'Plus/Cortes', description: '', tags: [] },
+  { title: 'MELANCIA AMARELA CORTE', content: 'PLU: 756815\nBarcode: ', category: 'Plus/Cortes', description: '', tags: [] },
+  { title: 'MELANCIA PINGO DOCE CORTE', content: 'PLU: 756822\nBarcode: ', category: 'Plus/Cortes', description: '', tags: [] },
+  { title: 'MELÃO CANTALOUPE CORTE', content: 'PLU: 339261\nBarcode: ', category: 'Plus/Cortes', description: '', tags: [] },
+  { title: 'MELÃO VERDE CORTE', content: 'PLU: 339087\nBarcode: ', category: 'Plus/Cortes', description: '', tags: [] },
+  { title: 'MAMÃO PAPAYA CORTE', content: 'PLU: 273251\nBarcode: ', category: 'Plus/Cortes', description: '', tags: [] },
+  { title: 'MELÃO ORANGE CORTE', content: 'PLU: 188021\nBarcode: ', category: 'Plus/Cortes', description: '', tags: [] },
+  { title: 'MELÃO DINO CORTE', content: 'PLU: 225726\nBarcode: ', category: 'Plus/Cortes', description: '', tags: [] },
+  { title: 'MELÃO GALIA CORTE', content: 'PLU: 81339\nBarcode: ', category: 'Plus/Cortes', description: '', tags: [] },
+  { title: 'MELÃO CHARANTEIAS CORTE', content: 'PLU: 33664\nBarcode: ', category: 'Plus/Cortes', description: '', tags: [] },
+  { title: 'ABOBORA JAPONESA CORTE', content: 'PLU: 31233\nBarcode: ', category: 'Plus/Cortes', description: '', tags: [] },
+  { title: 'REPOLHO VERDE CORTE', content: 'PLU: 72137\nBarcode: ', category: 'Plus/Cortes', description: '', tags: [] },
+  { title: 'ABOBORA SECA CORTE', content: 'PLU: 25379\nBarcode: ', category: 'Plus/Cortes', description: '', tags: [] },
+  { title: 'ABOBORA MORANGA CORTE', content: 'PLU: 31488\nBarcode: ', category: 'Plus/Cortes', description: '', tags: [] },
+  { title: 'JERIMUM LEITE CORTE', content: 'PLU: 70232\nBarcode: ', category: 'Plus/Cortes', description: '', tags: [] },
+  { title: 'REPOLHO ROXO CORTE', content: 'PLU: 5357\nBarcode: ', category: 'Plus/Cortes', description: '', tags: [] },
+  { title: 'ABOBORA BAIANA CORTE', content: 'PLU: 29674\nBarcode: ', category: 'Plus/Cortes', description: '', tags: [] },
+  { title: 'ABOBORA COMUM CORTE', content: 'PLU: 101417\nBarcode: ', category: 'Plus/Cortes', description: '', tags: [] },
+  { title: 'ABOBORA JACARÉ CORTE', content: 'PLU: 289788\nBarcode: ', category: 'Plus/Cortes', description: '', tags: [] },
+  { title: 'ABOBORA BATA CORTE', content: 'PLU: 771337\nBarcode: ', category: 'Plus/Cortes', description: '', tags: [] }
 ];
 
 
