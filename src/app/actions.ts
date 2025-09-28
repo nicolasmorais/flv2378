@@ -90,3 +90,26 @@ export async function deleteNoteAction(id: string) {
         throw new Error('Failed to delete note.');
     }
 }
+
+export async function clearAndReseedDatabase() {
+  try {
+    console.log("Dropping table 'notes'...");
+    await sql`DROP TABLE IF EXISTS notes`;
+    console.log("Table 'notes' dropped.");
+    
+    // Re-run setup to create the table and seed it
+    await setupDatabase();
+
+    revalidatePath('/');
+    revalidatePath('/frutas');
+    revalidatePath('/folhagem');
+    revalidatePath('/verduras-legumes');
+    revalidatePath('/plus-pacotes');
+    revalidatePath('/plus-cortes');
+    
+    return { success: true };
+  } catch (error) {
+    console.error('Failed to clear and re-seed database:', error);
+    return { success: false, error: 'Failed to clear and re-seed database.' };
+  }
+}

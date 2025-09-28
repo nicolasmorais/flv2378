@@ -26,7 +26,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
+} from "@/components/ui/alert-dialog";
+import { clearAndReseedDatabase } from '@/app/actions';
 
 type Category = 'Frutas' | 'Legumes e Verduras' | 'Outros' | 'Plus/Pacotes' | 'Plus/Cortes';
 
@@ -65,7 +66,7 @@ const CategoryCard = ({
       <CardContent>
         <ScrollArea className="h-[34rem]">
           <div className="space-y-2 pr-4">
-            {isLoading && [...Array(5)].map((_, i) => (
+            {isLoading && [...Array(14)].map((_, i) => (
               <div key={i} className="flex items-center justify-between gap-2 rounded-md border bg-muted/50 p-2">
                 <Skeleton className="h-7 w-7" />
                 <Skeleton className="h-5 w-2/3" />
@@ -139,7 +140,7 @@ export default function Home() {
   const [isNoteFormOpen, setNoteFormOpen] = useState(false);
   const [activeCategory, setActiveCategory] = useState<Category | null>(null);
   const [editingNote, setEditingNote] = useState<Note | undefined>(undefined);
-  const { notes, addNote, updateNote, deleteNote, isLoaded } = useNotesStore();
+  const { notes, addNote, updateNote, deleteNote, isLoaded, loadNotes } = useNotesStore();
 
   const handleAddNew = (category: Category) => {
     setActiveCategory(category);
@@ -176,6 +177,11 @@ export default function Home() {
     handleNoteFormClose();
   };
 
+  const handleClearDatabase = async () => {
+    await clearAndReseedDatabase();
+    await loadNotes();
+  };
+
   const filterNotesByCategory = (category: Category) => {
     return notes
       .filter(note => note.category === category)
@@ -198,6 +204,25 @@ export default function Home() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center justify-between mb-6">
             <h1 className="text-2xl font-bold">Todos os Plus</h1>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button variant="destructive">Limpar e Reiniciar Banco de Dados</Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Você tem certeza?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    Esta ação irá apagar todos os dados atuais e recarregar os produtos iniciais. Todas as alterações, adições ou exclusões que você fez serão perdidas.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                  <AlertDialogAction onClick={handleClearDatabase} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+                    Sim, limpar e reiniciar
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           </div>
           
           <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 mb-6">

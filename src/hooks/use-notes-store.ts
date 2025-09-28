@@ -54,5 +54,9 @@ export const useNotesStore = () => {
         });
     }, []);
 
-    return { ...store, isLoaded: hasHydrated, loadNotes: store.loadNotes };
+    const loadNotes = async () => {
+        await store.loadNotes();
+    }
+
+    return { ...store, isLoaded: hasHydrated, loadNotes };
 };
