@@ -6,16 +6,10 @@ import { Button } from '@/components/ui/button';
 import { SidebarTrigger } from '@/components/ui/sidebar';
 
 interface AppHeaderProps {
-  searchTerm: string;
-  onSearchChange: (term: string) => void;
-  onAddNew: () => void;
   onGeneratePassword: () => void;
 }
 
 export default function AppHeader({
-  searchTerm,
-  onSearchChange,
-  onAddNew,
   onGeneratePassword,
 }: AppHeaderProps) {
   return (
@@ -26,26 +20,14 @@ export default function AppHeader({
             <SidebarTrigger className="md:hidden" />
           </div>
           <div className="flex flex-1 items-center justify-center px-4 sm:px-8 lg:px-16">
-            <div className="w-full max-w-md relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input
-                type="search"
-                placeholder="Search notes..."
-                className="pl-9 w-full"
-                value={searchTerm}
-                onChange={e => onSearchChange(e.target.value)}
-              />
-            </div>
+           
           </div>
           <div className="flex items-center gap-2">
             <Button variant="ghost" size="sm" onClick={onGeneratePassword} className="hidden sm:inline-flex">
               <Sparkles className="mr-2 h-4 w-4" />
               Generate
             </Button>
-            <Button onClick={onAddNew} size="sm">
-              <Plus className="mr-0 sm:mr-2 h-4 w-4" />
-              <span className="hidden sm:inline">Add New</span>
-            </Button>
+            
           </div>
         </div>
       </div>

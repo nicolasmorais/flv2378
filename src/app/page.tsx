@@ -60,9 +60,6 @@ export default function Home() {
   return (
     <div className="flex flex-col h-screen">
       <AppHeader
-        searchTerm={searchTerm}
-        onSearchChange={setSearchTerm}
-        onAddNew={handleAddNew}
         onGeneratePassword={() => setPasswordGeneratorOpen(true)}
       />
 
