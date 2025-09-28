@@ -63,7 +63,7 @@ const CategoryCard = ({
         </Button>
       </CardHeader>
       <CardContent>
-        <ScrollArea className="h-64">
+        <ScrollArea className="h-96">
           <div className="space-y-2 pr-4">
             {isLoading && [...Array(5)].map((_, i) => (
               <div key={i} className="flex items-center justify-between gap-2 rounded-md border bg-muted/50 p-2">
