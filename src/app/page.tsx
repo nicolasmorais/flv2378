@@ -28,7 +28,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 
-type Category = 'Frutas' | 'Legumes e Verduras' | 'Outros';
+type Category = 'Frutas' | 'Legumes e Verduras' | 'Outros' | 'Plus/Pacotes';
 
 const CategoryCard = ({ 
   category, 
@@ -220,6 +220,14 @@ export default function Home() {
             <CategoryCard 
               category="Outros"
               notes={filterNotesByCategory('Outros')}
+              isLoading={!isLoaded}
+              onAddNew={handleAddNew}
+              onEdit={handleEdit}
+              onDelete={deleteNote}
+            />
+             <CategoryCard 
+              category="Plus/Pacotes"
+              notes={filterNotesByCategory('Plus/Pacotes')}
               isLoading={!isLoaded}
               onAddNew={handleAddNew}
               onEdit={handleEdit}

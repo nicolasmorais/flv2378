@@ -46,6 +46,7 @@ export async function addNoteAction(note: Omit<Note, 'id' | 'createdAt' >) {
     revalidatePath('/frutas');
     revalidatePath('/folhagem');
     revalidatePath('/verduras-legumes');
+    revalidatePath('/plus-pacotes');
   } catch (error) {
     console.error('Failed to add note:', error);
     throw new Error('Failed to add note.');
@@ -63,6 +64,7 @@ export async function updateNoteAction(id: string, note: Partial<Omit<Note, 'id'
         revalidatePath('/frutas');
         revalidatePath('/folhagem');
         revalidatePath('/verduras-legumes');
+        revalidatePath('/plus-pacotes');
     } catch (error) {
         console.error('Failed to update note:', error);
         throw new Error('Failed to update note.');
@@ -79,25 +81,9 @@ export async function deleteNoteAction(id: string) {
         revalidatePath('/frutas');
         revalidatePath('/folhagem');
         revalidatePath('/verduras-legumes');
+        revalidatePath('/plus-pacotes');
     } catch (error) {
         console.error('Failed to delete note:', error);
         throw new Error('Failed to delete note.');
-    }
-}
-
-export async function resetDatabaseAction() {
-    try {
-        console.log("Dropping table 'notes'...");
-        await sql`DROP TABLE IF EXISTS notes;`;
-        console.log("Table 'notes' dropped.");
-
-        console.log("Re-running database setup...");
-        await setupDatabase();
-        console.log("Database setup complete.");
-        
-        revalidatePath('/');
-    } catch (error) {
-        console.error('Failed to reset database:', error);
-        throw new Error('Failed to reset database.');
     }
 }
