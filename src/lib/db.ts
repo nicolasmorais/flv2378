@@ -111,7 +111,10 @@ const initialData = [
   { title: 'ABOBORA BAIANA CORTE', content: 'PLU: 29674\nBarcode: ', category: 'Plus/Cortes', description: '', tags: [] },
   { title: 'ABOBORA COMUM CORTE', content: 'PLU: 101417\nBarcode: ', category: 'Plus/Cortes', description: '', tags: [] },
   { title: 'ABOBORA JACARÉ CORTE', content: 'PLU: 289788\nBarcode: ', category: 'Plus/Cortes', description: '', tags: [] },
-  { title: 'ABOBORA BATA CORTE', content: 'PLU: 771337\nBarcode: ', category: 'Plus/Cortes', description: '', tags: [] }
+  { title: 'ABOBORA BATA CORTE', content: 'PLU: 771337\nBarcode: ', category: 'Plus/Cortes', description: '', tags: [] },
+
+  // Outros
+  { title: 'ALHO GNEL', content: 'PLU: 336690\nBarcode: ', category: 'Outros', description: '', tags: [] }
 ];
 
 

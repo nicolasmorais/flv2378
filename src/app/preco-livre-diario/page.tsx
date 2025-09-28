@@ -1,8 +1,205 @@
+'use client';
+
+import { useState, useMemo } from 'react';
+import { useNotesStore } from '@/hooks/use-notes-store';
+import type { Note } from '@/lib/types';
+import NoteForm from '@/components/note-form';
+import { Button } from '@/components/ui/button';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Skeleton } from '@/components/ui/skeleton';
+import { SidebarTrigger } from '@/components/ui/sidebar';
+import { PlusCircle, Copy, Check, MoreVertical, Edit, Trash2 } from 'lucide-react';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+
+const dailyFreePriceProducts = [
+    'BATATA COMUM',
+    'BANANA PRATA',
+    'BANANA NANICA ORGÂNICA',
+    'CEBOLA NACIONAL',
+    'ALHO GNEL',
+    'MAMÃO FORMOSA',
+    'MAMÃO PAPAYA GOLDEN GNEL KG',
+    'MAÇA GALA NACIONAL', // Assumido como "Maçã Pink Lady"
+    'LARANJA PERA',
+    'ABACAXI PEROLA UND',
+];
+
+
 export default function PrecoLivreDiarioPage() {
-    return (
-        <div className="container mx-auto p-4">
-            <h1 className="text-2xl font-bold">Preço Livre Diário</h1>
-            <p className="mt-4">Conteúdo da página Preço Livre Diário.</p>
+  const { notes, addNote, updateNote, deleteNote, isLoaded } = useNotesStore();
+  const [isNoteFormOpen, setNoteFormOpen] = useState(false);
+  const [editingNote, setEditingNote] = useState<Note | undefined>(undefined);
+  const [copiedPlu, setCopiedPlu] = useState<string | null>(null);
+
+  const filteredNotes = useMemo(() => {
+    return notes
+      .filter(note => dailyFreePriceProducts.includes(note.title))
+      .sort((a, b) => a.title.localeCompare(b.title));
+  }, [notes]);
+
+  const handleEdit = (note: Note) => {
+    setEditingNote(note);
+    setNoteFormOpen(true);
+  };
+
+  const handleAddNew = () => {
+    setEditingNote(undefined);
+    setNoteFormOpen(true);
+  };
+
+  const handleNoteFormClose = () => {
+    setNoteFormOpen(false);
+    setEditingNote(undefined);
+  };
+
+  const handleSaveNote = (noteData: Omit<Note, 'id' | 'createdAt' | 'category' | 'tags' | 'description'> & { plu: string; barcode: string }) => {
+    const noteToSave = {
+      title: noteData.title,
+      content: `PLU: ${noteData.plu}\nBarcode: ${noteData.barcode}`,
+      category: 'Preço Livre Diário',
+      description: '',
+      tags: [],
+    };
+
+    if (editingNote) {
+      updateNote(editingNote.id, noteToSave);
+    } else {
+      addNote(noteToSave);
+    }
+    handleNoteFormClose();
+  };
+
+  const handleCopy = (plu: string) => {
+    navigator.clipboard.writeText(plu);
+    setCopiedPlu(plu);
+    setTimeout(() => setCopiedPlu(null), 2000);
+  };
+
+  return (
+    <div className="flex flex-col h-screen">
+       <header className="border-b bg-card backdrop-blur-sm sticky top-0 z-10 md:hidden">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex h-16 items-center justify-between">
+            <div className="flex items-center gap-2">
+                <SidebarTrigger />
+            </div>
+            </div>
         </div>
-    );
+      </header>
+      <main className="flex-1 overflow-auto">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 h-full flex flex-col">
+          <div className="flex items-center justify-between mb-6">
+            <h1 className="text-2xl font-bold">Preço Livre Diário</h1>
+            <Button onClick={handleAddNew}>
+              <PlusCircle className="mr-2 h-4 w-4" />
+              Novo Cadastro
+            </Button>
+          </div>
+
+          <ScrollArea className="flex-1 -mx-4 rounded-lg border">
+             <div className="p-4 space-y-2">
+              {!isLoaded && [...Array(10)].map((_, i) => (
+                <div key={i} className="flex items-center justify-between gap-2 rounded-md border bg-muted/50 p-2">
+                  <Skeleton className="h-7 w-7" />
+                  <Skeleton className="h-5 w-2/3" />
+                  <Skeleton className="h-7 w-7" />
+                </div>
+              ))}
+              {isLoaded && filteredNotes.length > 0 && (
+                <>
+                  {filteredNotes.map(note => {
+                     const pluMatch = note.content.match(/PLU: (.*)/);
+                     const plu = pluMatch ? pluMatch[1].trim() : '';
+                     return (
+                      <div key={note.id} className="flex items-center justify-between gap-2 rounded-md border bg-muted/50 p-2">
+                        <div className="flex items-center gap-2 truncate">
+                          <Button variant="ghost" size="icon" className="h-7 w-7 flex-shrink-0" onClick={() => handleCopy(plu)}>
+                            {copiedPlu === plu ? <Check className="h-4 w-4 text-green-500" /> : <Copy className="h-4 w-4" />}
+                          </Button>
+                          <p className="font-medium text-sm truncate">
+                            {note.title} - <span className="font-mono">{plu}</span>
+                          </p>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <DropdownMenu>
+                              <DropdownMenuTrigger asChild>
+                                  <Button variant="ghost" size="icon" className="h-7 w-7 flex-shrink-0">
+                                      <MoreVertical className="h-4 w-4" />
+                                  </Button>
+                              </DropdownMenuTrigger>
+                              <DropdownMenuContent align="end">
+                                  <DropdownMenuItem onClick={() => handleEdit(note)}>
+                                      <Edit className="mr-2 h-4 w-4" />
+                                      <span>Editar</span>
+                                  </DropdownMenuItem>
+                                  <AlertDialog>
+                                      <AlertDialogTrigger asChild>
+                                          <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                                              <Trash2 className="mr-2 h-4 w-4 text-destructive" />
+                                              <span className="text-destructive">Deletar</span>
+                                          </DropdownMenuItem>
+                                      </AlertDialogTrigger>
+                                      <AlertDialogContent>
+                                          <AlertDialogHeader>
+                                              <AlertDialogTitle>Você tem certeza?</AlertDialogTitle>
+                                              <AlertDialogDescription>
+                                                  Essa ação não pode ser desfeita. Isso irá deletar o item permanentemente.
+                                              </AlertDialogDescription>
+                                          </AlertDialogHeader>
+                                          <AlertDialogFooter>
+                                              <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                                              <AlertDialogAction onClick={() => deleteNote(note.id)} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+                                                  Deletar
+                                              </AlertDialogAction>
+                                          </AlertDialogFooter>
+                                      </AlertDialogContent>
+                                  </AlertDialog>
+                              </DropdownMenuContent>
+                          </DropdownMenu>
+                        </div>
+                      </div>
+                     )
+                  })}
+                </>
+              )}
+              {isLoaded && filteredNotes.length === 0 && (
+                <div className="text-center py-20">
+                  <h3 className="text-xl font-semibold text-muted-foreground">
+                    Nenhum item cadastrado
+                  </h3>
+                  <p className="text-muted-foreground mt-2">
+                    Verifique os nomes dos produtos ou adicione-os manualmente.
+                  </p>
+                </div>
+              )}
+             </div>
+          </ScrollArea>
+        </div>
+      </main>
+
+      <NoteForm
+        isOpen={isNoteFormOpen}
+        onOpenChange={handleNoteFormClose}
+        note={editingNote}
+        onSave={handleSaveNote}
+        activeCategory="Preço Livre Diário"
+      />
+    </div>
+  );
 }
