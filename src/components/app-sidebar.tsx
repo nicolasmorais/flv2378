@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { Home, Leaf, Apple, Carrot, CalendarDays, LogOut, Package } from 'lucide-react';
+import { Home, Leaf, Apple, Carrot, CalendarDays, LogOut, Package, Scissors } from 'lucide-react';
 import {
   SidebarHeader,
   SidebarContent,
@@ -21,6 +21,7 @@ const menuItems = [
     { href: '/frutas', label: 'Plus Frutas', icon: Apple },
     { href: '/verduras-legumes', label: 'Plus Verduras e Legumes', icon: Carrot },
     { href: '/plus-pacotes', label: 'Plus/Pacotes', icon: Package },
+    { href: '/plus-cortes', label: 'Plus/Cortes', icon: Scissors },
     { href: '/preco-livre-diario', label: 'Preço Livre Diário', icon: CalendarDays },
 ];
 

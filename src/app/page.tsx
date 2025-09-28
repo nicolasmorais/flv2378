@@ -28,7 +28,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 
-type Category = 'Frutas' | 'Legumes e Verduras' | 'Outros' | 'Plus/Pacotes';
+type Category = 'Frutas' | 'Legumes e Verduras' | 'Outros' | 'Plus/Pacotes' | 'Plus/Cortes';
 
 const CategoryCard = ({ 
   category, 
@@ -67,8 +67,8 @@ const CategoryCard = ({
           <div className="space-y-2 pr-4">
             {isLoading && [...Array(5)].map((_, i) => (
               <div key={i} className="flex items-center justify-between gap-2 rounded-md border bg-muted/50 p-2">
-                <Skeleton className="h-5 w-2/3" />
                 <Skeleton className="h-7 w-7" />
+                <Skeleton className="h-5 w-2/3" />
               </div>
             ))}
             {!isLoading && notes.map(note => {
@@ -228,6 +228,14 @@ export default function Home() {
              <CategoryCard 
               category="Plus/Pacotes"
               notes={filterNotesByCategory('Plus/Pacotes')}
+              isLoading={!isLoaded}
+              onAddNew={handleAddNew}
+              onEdit={handleEdit}
+              onDelete={deleteNote}
+            />
+             <CategoryCard 
+              category="Plus/Cortes"
+              notes={filterNotesByCategory('Plus/Cortes')}
               isLoading={!isLoaded}
               onAddNew={handleAddNew}
               onEdit={handleEdit}

@@ -47,6 +47,7 @@ export async function addNoteAction(note: Omit<Note, 'id' | 'createdAt' >) {
     revalidatePath('/folhagem');
     revalidatePath('/verduras-legumes');
     revalidatePath('/plus-pacotes');
+    revalidatePath('/plus-cortes');
   } catch (error) {
     console.error('Failed to add note:', error);
     throw new Error('Failed to add note.');
@@ -65,6 +66,7 @@ export async function updateNoteAction(id: string, note: Partial<Omit<Note, 'id'
         revalidatePath('/folhagem');
         revalidatePath('/verduras-legumes');
         revalidatePath('/plus-pacotes');
+        revalidatePath('/plus-cortes');
     } catch (error) {
         console.error('Failed to update note:', error);
         throw new Error('Failed to update note.');
@@ -82,6 +84,7 @@ export async function deleteNoteAction(id: string) {
         revalidatePath('/folhagem');
         revalidatePath('/verduras-legumes');
         revalidatePath('/plus-pacotes');
+        revalidatePath('/plus-cortes');
     } catch (error) {
         console.error('Failed to delete note:', error);
         throw new Error('Failed to delete note.');
