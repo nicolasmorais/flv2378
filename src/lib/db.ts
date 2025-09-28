@@ -41,7 +41,6 @@ const initialData = [
   { title: 'PERA ASIATICA', content: 'PLU: 248724\nBarcode: ', category: 'Frutas', description: '', tags: [] },
   { title: 'PERA PORT COMICE IMP GNEL KG', content: 'PLU: 259767\nBarcode: ', category: 'Frutas', description: '', tags: [] },
   { title: 'PERA PAKANS', content: 'PLU: 248708\nBarcode: ', category: 'Frutas', description: '', tags: [] },
-  { title: 'PERA DANJOU', content: 'PLU: 248594\nBarcode: ', category: 'Frutas', description: '', tags: [] },
   { title: 'PERA FORELLE IMPORTADA', content: 'PLU: 248703\nBarcode: ', category: 'Frutas', description: '', tags: [] },
   { title: 'PERA PORTUGUESA ROCHA', content: 'PLU: 248043\nBarcode: ', category: 'Frutas', description: '', tags: [] },
   { title: 'PERA RED ANJOU IMPORTADO', content: 'PLU: 248087\nBarcode: ', category: 'Frutas', description: '', tags: [] },
