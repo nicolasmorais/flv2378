@@ -3,13 +3,12 @@
 import { useState, useMemo } from 'react';
 import { useNotesStore } from '@/hooks/use-notes-store';
 import type { Note } from '@/lib/types';
-import AppHeader from '@/components/header';
 import NoteCard from '@/components/note-card';
 import NoteForm from '@/components/note-form';
-import PasswordGenerator from '@/components/password-generator';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Skeleton } from '@/components/ui/skeleton';
+import { SidebarTrigger } from '@/components/ui/sidebar';
 
 export default function Home() {
   const { notes, addNote, updateNote, deleteNote, isLoaded } = useNotesStore();
@@ -17,7 +16,6 @@ export default function Home() {
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
 
   const [isNoteFormOpen, setNoteFormOpen] = useState(false);
-  const [isPasswordGeneratorOpen, setPasswordGeneratorOpen] = useState(false);
   const [editingNote, setEditingNote] = useState<Note | undefined>(undefined);
 
   const categories = useMemo(() => {
@@ -59,9 +57,15 @@ export default function Home() {
 
   return (
     <div className="flex flex-col h-screen">
-      <AppHeader
-        onGeneratePassword={() => setPasswordGeneratorOpen(true)}
-      />
+      <header className="border-b bg-card backdrop-blur-sm sticky top-0 z-10 md:hidden">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex h-16 items-center justify-between">
+            <div className="flex items-center gap-2">
+                <SidebarTrigger />
+            </div>
+            </div>
+        </div>
+      </header>
 
       <main className="flex-1 overflow-hidden">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 h-full flex flex-col">
@@ -119,7 +123,7 @@ export default function Home() {
                     {notes.length > 0 ? 'No notes match your search' : 'No notes yet'}
                   </h3>
                   <p className="text-muted-foreground mt-2">
-                    {notes.length > 0 ? 'Try a different search or filter.' : 'Click "Add New" to get started.'}
+                    {notes.length > 0 ? 'Try a different search or filter.' : 'No notes yet'}
                   </p>
                 </div>
               )}
@@ -142,10 +146,6 @@ export default function Home() {
         }}
       />
       
-      <PasswordGenerator
-        isOpen={isPasswordGeneratorOpen}
-        onOpenChange={setPasswordGeneratorOpen}
-      />
     </div>
   );
 }

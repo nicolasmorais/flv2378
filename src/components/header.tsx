@@ -1,17 +1,8 @@
 'use client';
 
-import { ShieldCheck, Search, Plus, Sparkles } from 'lucide-react';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
 import { SidebarTrigger } from '@/components/ui/sidebar';
 
-interface AppHeaderProps {
-  onGeneratePassword: () => void;
-}
-
-export default function AppHeader({
-  onGeneratePassword,
-}: AppHeaderProps) {
+export default function AppHeader() {
   return (
     <header className="border-b bg-card backdrop-blur-sm sticky top-0 z-10">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -23,10 +14,6 @@ export default function AppHeader({
            
           </div>
           <div className="flex items-center gap-2">
-            <Button variant="ghost" size="sm" onClick={onGeneratePassword} className="hidden sm:inline-flex">
-              <Sparkles className="mr-2 h-4 w-4" />
-              Generate
-            </Button>
             
           </div>
         </div>
