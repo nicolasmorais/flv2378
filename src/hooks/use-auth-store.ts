@@ -7,20 +7,20 @@ import { useState, useEffect } from 'react';
 
 interface AuthState {
   isAuthenticated: boolean;
-  isAuthLoaded: boolean;
   login: () => void;
   logout: () => void;
-  _setAuthLoaded: (isLoaded: boolean) => void;
 }
 
 const useAuthStoreInternal = create<AuthState>()(
   persist(
     (set) => ({
       isAuthenticated: false,
-      isAuthLoaded: false,
       login: () => set({ isAuthenticated: true }),
-      logout: () => set({ isAuthenticated: false }),
-      _setAuthLoaded: (isLoaded: boolean) => set({ isAuthLoaded: isLoaded }),
+      logout: () => {
+        // also clear session storage on logout
+        sessionStorage.removeItem('auth-storage');
+        set({ isAuthenticated: false });
+      },
     }),
     {
       name: 'auth-storage', 
@@ -29,30 +29,31 @@ const useAuthStoreInternal = create<AuthState>()(
   )
 );
 
-export const useAuthStore = () => {
-    const state = useAuthStoreInternal();
-    const [hasHydrated, setHasHydrated] = useState(false);
+interface AuthStore extends AuthState {
+    isAuthLoaded: boolean;
+}
 
-    useEffect(() => {
-        // This effect ensures that we check the persisted state only on the client
-        // and set the isAuthLoaded flag correctly.
-        const unsubscribe = useAuthStoreInternal.persist.onFinishHydration(() => {
-            state._setAuthLoaded(true);
-            setHasHydrated(true);
-        });
+// Custom hook to safely access the persisted state on the client
+export const useAuthStore = (): AuthStore => {
+  const [hydratedState, setHydratedState] = useState<AuthState & { isAuthLoaded: boolean }>({
+    isAuthenticated: false,
+    login: () => {},
+    logout: () => {},
+    isAuthLoaded: false,
+  });
 
-        // If hydration is already done, set loaded state
-        if (useAuthStoreInternal.persist.hasHydrated()) {
-            state._setAuthLoaded(true);
-            setHasHydrated(true);
-        }
-        
-        return () => {
-            unsubscribe();
-        };
+  useEffect(() => {
+    // This runs only on the client, after hydration
+    const unsub = useAuthStoreInternal.subscribe(state => {
+      setHydratedState({ ...state, isAuthLoaded: true });
+    });
 
-    }, []);
+    // Set initial state
+    const currentState = useAuthStoreInternal.getState();
+    setHydratedState({ ...currentState, isAuthLoaded: true });
 
-    // Return the state but ensure isAuthLoaded is reflective of hydration status
-    return { ...state, isAuthLoaded: hasHydrated };
+    return () => unsub();
+  }, []);
+
+  return hydratedState;
 };
