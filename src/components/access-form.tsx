@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import type { Access } from '@/lib/types';
+import type { Note } from '@/lib/types';
 import {
   Dialog,
   DialogContent,
@@ -37,16 +37,16 @@ type FormValues = z.infer<typeof formSchema>;
 interface AccessFormProps {
   isOpen: boolean;
   onOpenChange: (isOpen: boolean) => void;
-  access?: Access;
+  note?: Note;
   onSave: (data: FormValues) => void;
 }
 
-export default function AccessForm({ isOpen, onOpenChange, access, onSave }: AccessFormProps) {
+export default function AccessForm({ isOpen, onOpenChange, note, onSave }: AccessFormProps) {
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       systemName: '',
-      link: '',
+      link: 'https://',
       username: '',
       password: '',
     },
@@ -54,12 +54,15 @@ export default function AccessForm({ isOpen, onOpenChange, access, onSave }: Acc
 
   useEffect(() => {
     if (isOpen) {
-      if (access) {
+      if (note) {
+        const linkMatch = note.content.match(/Link: (.*)/);
+        const userMatch = note.content.match(/Usuário: (.*)/);
+        const passMatch = note.content.match(/Senha: (.*)/);
         form.reset({
-          systemName: access.systemName,
-          link: access.link,
-          username: access.username,
-          password: access.password,
+          systemName: note.title,
+          link: linkMatch ? linkMatch[1].trim() : '',
+          username: userMatch ? userMatch[1].trim() : '',
+          password: passMatch ? passMatch[1].trim() : '',
         });
       } else {
         form.reset({
@@ -70,7 +73,7 @@ export default function AccessForm({ isOpen, onOpenChange, access, onSave }: Acc
         });
       }
     }
-  }, [access, form, isOpen]);
+  }, [note, form, isOpen]);
 
   const onSubmit = (values: FormValues) => {
     onSave(values);
@@ -80,7 +83,7 @@ export default function AccessForm({ isOpen, onOpenChange, access, onSave }: Acc
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[480px]">
         <DialogHeader>
-          <DialogTitle>{access ? 'Editar Acesso' : 'Novo Acesso'}</DialogTitle>
+          <DialogTitle>{note ? 'Editar Acesso' : 'Novo Acesso'}</DialogTitle>
           <DialogDescription>
             Preencha os dados abaixo para salvar as credenciais.
           </DialogDescription>

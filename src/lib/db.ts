@@ -153,20 +153,6 @@ export async function setupDatabase() {
             console.log("Table 'notes' already contains data. Skipping seed.");
         }
 
-        // Create accesses table if it doesn't exist
-        await sql`
-            CREATE TABLE IF NOT EXISTS accesses (
-                id SERIAL PRIMARY KEY,
-                "systemName" VARCHAR(255),
-                link VARCHAR(255),
-                username VARCHAR(255),
-                password VARCHAR(255),
-                "createdAt" TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
-            );
-        `;
-        console.log("Table 'accesses' is ready.");
-
-
     } catch (error) {
         console.error("Error setting up database:", error);
         // Don't throw error, as it might be a connection issue that resolves later.

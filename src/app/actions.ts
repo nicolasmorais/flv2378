@@ -8,7 +8,7 @@ import {
 } from '@/ai/flows/generate-strong-password';
 import { sql } from '@vercel/postgres';
 import { revalidatePath } from 'next/cache';
-import type { Note, Access } from '@/lib/types';
+import type { Note } from '@/lib/types';
 import { setupDatabase } from '@/lib/db';
 
 export async function generatePasswordAction(input: GenerateStrongPasswordInput): Promise<GenerateStrongPasswordOutput> {
@@ -100,70 +100,11 @@ export async function deleteNoteAction(id: string) {
     }
 }
 
-// Access actions
-export async function fetchAccesses(): Promise<Access[]> {
-  try {
-    const { rows } = await sql<Access>`SELECT id, "systemName", link, username, password, "createdAt" FROM accesses ORDER BY "createdAt" DESC`;
-    return rows;
-  } catch (error) {
-    console.error('Failed to fetch accesses:', error);
-    if ((error as any).code === '42P01') {
-      console.log("Table 'accesses' not found. Returning empty array.");
-      return [];
-    }
-    throw new Error('Failed to fetch accesses.');
-  }
-}
-
-export async function addAccessAction(access: Omit<Access, 'id' | 'createdAt'>) {
-  try {
-    await sql`
-      INSERT INTO accesses ("systemName", link, username, password)
-      VALUES (${access.systemName}, ${access.link}, ${access.username}, ${access.password})
-    `;
-    revalidatePath('/acessos');
-  } catch (error) {
-    console.error('Failed to add access:', error);
-    throw new Error('Failed to add access.');
-  }
-}
-
-export async function updateAccessAction(id: string, access: Partial<Omit<Access, 'id' | 'createdAt'>>) {
-  try {
-    await sql`
-      UPDATE accesses
-      SET "systemName" = ${access.systemName}, link = ${access.link}, username = ${access.username}, password = ${access.password}
-      WHERE id = ${id}
-    `;
-    revalidatePath('/acessos');
-  } catch (error) {
-    console.error('Failed to update access:', error);
-    throw new Error('Failed to update access.');
-  }
-}
-
-export async function deleteAccessAction(id: string) {
-  try {
-    await sql`
-      DELETE FROM accesses
-      WHERE id = ${id}
-    `;
-    revalidatePath('/acessos');
-  } catch (error) {
-    console.error('Failed to delete access:', error);
-    throw new Error('Failed to delete access.');
-  }
-}
-
-
 export async function clearAndReseedDatabase() {
   try {
     console.log("Dropping table 'notes'...");
     await sql`DROP TABLE IF EXISTS notes`;
     console.log("Table 'notes' dropped.");
-    console.log("Dropping table 'accesses'...");
-    await sql`DROP TABLE IF EXISTS accesses`;
-    console.log("Table 'accesses' dropped.");
     
     await setupDatabase();
 

@@ -1,12 +1,11 @@
 
 'use client';
 
-import { useState } from 'react';
-import { useAccessStore } from '@/hooks/use-access-store';
-import type { Access } from '@/lib/types';
+import { useState, useMemo } from 'react';
+import { useNotesStore } from '@/hooks/use-notes-store';
+import type { Note } from '@/lib/types';
 import AccessForm from '@/components/access-form';
 import { Button } from '@/components/ui/button';
-import { ScrollArea } from '@/components/ui/scroll-area';
 import { Skeleton } from '@/components/ui/skeleton';
 import { PlusCircle, MoreVertical, Edit, Trash2, Copy, Check } from 'lucide-react';
 import {
@@ -26,10 +25,13 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 const CopyableField = ({ label, value }: { label: string, value: string }) => {
     const [copied, setCopied] = useState(false);
+    
+    if (!value) return null;
+
     const handleCopy = () => {
         navigator.clipboard.writeText(value);
         setCopied(true);
@@ -50,33 +52,59 @@ const CopyableField = ({ label, value }: { label: string, value: string }) => {
 };
 
 export default function AcessosPage() {
-  const { accesses, addAccess, updateAccess, deleteAccess, isLoaded } = useAccessStore();
+  const { notes, addNote, updateNote, deleteNote, isLoaded } = useNotesStore();
   const [isFormOpen, setFormOpen] = useState(false);
-  const [editingAccess, setEditingAccess] = useState<Access | undefined>(undefined);
+  const [editingNote, setEditingNote] = useState<Note | undefined>(undefined);
 
-  const handleEdit = (access: Access) => {
-    setEditingAccess(access);
+  const accesses = useMemo(() => {
+    return notes
+      .filter(note => note.category === 'Acessos')
+      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+  }, [notes]);
+
+  const handleEdit = (note: Note) => {
+    setEditingNote(note);
     setFormOpen(true);
   };
 
   const handleAddNew = () => {
-    setEditingAccess(undefined);
+    setEditingNote(undefined);
     setFormOpen(true);
   };
 
   const handleFormClose = () => {
     setFormOpen(false);
-    setEditingAccess(undefined);
+    setEditingNote(undefined);
   };
 
-  const handleSaveAccess = (accessData: Omit<Access, 'id' | 'createdAt'>) => {
-    if (editingAccess) {
-      updateAccess(editingAccess.id, accessData);
+  const handleSaveNote = (data: { systemName: string; link: string; username: string; password: string; }) => {
+    const noteToSave = {
+      title: data.systemName,
+      content: `Link: ${data.link}\nUsuário: ${data.username}\nSenha: ${data.password}`,
+      category: 'Acessos',
+      description: '',
+      tags: [],
+    };
+
+    if (editingNote) {
+      updateNote(editingNote.id, noteToSave);
     } else {
-      addAccess(accessData);
+      addNote(noteToSave);
     }
     handleFormClose();
   };
+  
+  const parseContent = (content: string) => {
+    const linkMatch = content.match(/Link: (.*)/);
+    const userMatch = content.match(/Usuário: (.*)/);
+    const passMatch = content.match(/Senha: (.*)/);
+    return {
+      link: linkMatch ? linkMatch[1].trim() : '',
+      username: userMatch ? userMatch[1].trim() : '',
+      password: passMatch ? passMatch[1].trim() : '',
+    }
+  }
+
 
   return (
     <div className="flex flex-col h-screen">
@@ -110,60 +138,63 @@ export default function AcessosPage() {
             )}
             {isLoaded && accesses.length > 0 && (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {accesses.map(access => (
-                  <Card key={access.id} className="flex flex-col">
-                    <CardHeader>
-                      <div className="flex items-start justify-between">
-                        <div className="flex-1">
-                             <CardTitle className="text-lg">{access.systemName}</CardTitle>
-                             <p className="text-xs text-muted-foreground pt-1">
-                                {new Date(access.createdAt).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' })}
-                            </p>
+                {accesses.map(note => {
+                  const { link, username, password } = parseContent(note.content);
+                  return (
+                    <Card key={note.id} className="flex flex-col">
+                      <CardHeader>
+                        <div className="flex items-start justify-between">
+                          <div className="flex-1">
+                               <CardTitle className="text-lg">{note.title}</CardTitle>
+                               <p className="text-xs text-muted-foreground pt-1">
+                                  {new Date(note.createdAt).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' })}
+                              </p>
+                          </div>
+                          <DropdownMenu>
+                              <DropdownMenuTrigger asChild>
+                                  <Button variant="ghost" size="icon" className="h-7 w-7 flex-shrink-0 -mt-1 -mr-2">
+                                      <MoreVertical className="h-4 w-4" />
+                                  </Button>
+                              </DropdownMenuTrigger>
+                              <DropdownMenuContent align="end">
+                                  <DropdownMenuItem onClick={() => handleEdit(note)}>
+                                      <Edit className="mr-2 h-4 w-4" />
+                                      <span>Editar</span>
+                                  </DropdownMenuItem>
+                                  <AlertDialog>
+                                      <AlertDialogTrigger asChild>
+                                          <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                                              <Trash2 className="mr-2 h-4 w-4 text-destructive" />
+                                              <span className="text-destructive">Deletar</span>
+                                          </DropdownMenuItem>
+                                      </AlertDialogTrigger>
+                                      <AlertDialogContent>
+                                          <AlertDialogHeader>
+                                              <AlertDialogTitle>Você tem certeza?</AlertDialogTitle>
+                                              <AlertDialogDescription>
+                                                  Essa ação não pode ser desfeita. Isso irá deletar o acesso permanentemente.
+                                              </AlertDialogDescription>
+                                          </AlertDialogHeader>
+                                          <AlertDialogFooter>
+                                              <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                                              <AlertDialogAction onClick={() => deleteNote(note.id)} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+                                                  Deletar
+                                              </AlertDialogAction>
+                                          </AlertDialogFooter>
+                                      </AlertDialogContent>
+                                  </AlertDialog>
+                              </DropdownMenuContent>
+                          </DropdownMenu>
                         </div>
-                        <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <Button variant="ghost" size="icon" className="h-7 w-7 flex-shrink-0 -mt-1 -mr-2">
-                                    <MoreVertical className="h-4 w-4" />
-                                </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end">
-                                <DropdownMenuItem onClick={() => handleEdit(access)}>
-                                    <Edit className="mr-2 h-4 w-4" />
-                                    <span>Editar</span>
-                                </DropdownMenuItem>
-                                <AlertDialog>
-                                    <AlertDialogTrigger asChild>
-                                        <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-                                            <Trash2 className="mr-2 h-4 w-4 text-destructive" />
-                                            <span className="text-destructive">Deletar</span>
-                                        </DropdownMenuItem>
-                                    </AlertDialogTrigger>
-                                    <AlertDialogContent>
-                                        <AlertDialogHeader>
-                                            <AlertDialogTitle>Você tem certeza?</AlertDialogTitle>
-                                            <AlertDialogDescription>
-                                                Essa ação não pode ser desfeita. Isso irá deletar o acesso permanentemente.
-                                            </AlertDialogDescription>
-                                        </AlertDialogHeader>
-                                        <AlertDialogFooter>
-                                            <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                                            <AlertDialogAction onClick={() => deleteAccess(access.id)} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
-                                                Deletar
-                                            </AlertDialogAction>
-                                        </AlertDialogFooter>
-                                    </AlertDialogContent>
-                                </AlertDialog>
-                            </DropdownMenuContent>
-                        </DropdownMenu>
-                      </div>
-                    </CardHeader>
-                    <CardContent className="flex-1 space-y-2">
-                        <CopyableField label="Link" value={access.link} />
-                        <CopyableField label="Usuário" value={access.username} />
-                        <CopyableField label="Senha" value={access.password} />
-                    </CardContent>
-                  </Card>
-                ))}
+                      </CardHeader>
+                      <CardContent className="flex-1 space-y-2">
+                          <CopyableField label="Link" value={link} />
+                          <CopyableField label="Usuário" value={username} />
+                          <CopyableField label="Senha" value={password} />
+                      </CardContent>
+                    </Card>
+                  )
+                })}
               </div>
             )}
             {isLoaded && accesses.length === 0 && (
@@ -183,8 +214,8 @@ export default function AcessosPage() {
       <AccessForm
         isOpen={isFormOpen}
         onOpenChange={handleFormClose}
-        access={editingAccess}
-        onSave={handleSaveAccess}
+        note={editingNote}
+        onSave={handleSaveNote}
       />
     </div>
   );
