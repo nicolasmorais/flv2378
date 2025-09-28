@@ -3,6 +3,7 @@
 import { sql } from '@vercel/postgres';
 
 const initialData = [
+  // Frutas
   { title: 'ABACATE', content: 'PLU: 247023\nBarcode: ', category: 'Frutas', description: '', tags: [] },
   { title: 'ABACAXI PEROLA UND', content: 'PLU: 2173634\nBarcode: ', category: 'Frutas', description: '', tags: [] },
   { title: 'AMEIXA PRETA IMPORTADA', content: 'PLU: 248876\nBarcode: ', category: 'Frutas', description: '', tags: [] },
@@ -51,6 +52,8 @@ const initialData = [
   { title: 'PITAYA VERMELHA GNEL', content: 'PLU: 322891\nBarcode: ', category: 'Frutas', description: '', tags: [] },
   { title: 'ROMÃ', content: 'PLU: 291010\nBarcode: ', category: 'Frutas', description: '', tags: [] },
   { title: 'UVA TOMPOSON (GLOBE VERDE)', content: 'PLU: 2813\nBarcode: ', category: 'Frutas', description: '', tags: [] },
+
+  // Legumes e Verduras
   { title: 'ABOBORA BATÃ', content: 'PLU: 337705\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
   { title: 'ABOBORA JAPONESA', content: 'PLU: 336706\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
   { title: 'ABOBORA MORANGA', content: 'PLU: 336707\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
@@ -81,8 +84,9 @@ const initialData = [
   { title: 'TOMATE CEREJA AMARELO', content: 'PLU: 337418\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
   { title: 'TOMATE GRAPE GREEN KG', content: 'PLU: 337619\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
   { title: 'TOMATE GRAPE', content: 'PLU: 337617\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
-  { title: 'TOMATE CEREJA RAMA GNEL', content: 'PLU: 337618\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
+  { title: 'TOMATE CEREJA RAMA GNEL', content: 'PLU: 337618\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] }
 ];
+
 
 export async function setupDatabase() {
     console.log("Setting up database...");
