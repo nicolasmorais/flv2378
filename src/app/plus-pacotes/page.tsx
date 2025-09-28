@@ -3,23 +3,40 @@
 import { useState, useMemo } from 'react';
 import { useNotesStore } from '@/hooks/use-notes-store';
 import type { Note } from '@/lib/types';
-import NoteCard from '@/components/note-card';
 import NoteForm from '@/components/note-form';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Skeleton } from '@/components/ui/skeleton';
 import { SidebarTrigger } from '@/components/ui/sidebar';
-import { PlusCircle } from 'lucide-react';
+import { PlusCircle, Copy, Check, MoreVertical, Edit, Trash2 } from 'lucide-react';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 export default function PlusPacotesPage() {
   const { notes, addNote, updateNote, deleteNote, isLoaded } = useNotesStore();
   const [isNoteFormOpen, setNoteFormOpen] = useState(false);
   const [editingNote, setEditingNote] = useState<Note | undefined>(undefined);
+  const [copiedPlu, setCopiedPlu] = useState<string | null>(null);
 
   const filteredNotes = useMemo(() => {
     return notes
       .filter(note => note.category === 'Plus/Pacotes')
-      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+      .sort((a, b) => a.title.localeCompare(b.title));
   }, [notes]);
 
   const handleEdit = (note: Note) => {
@@ -54,6 +71,12 @@ export default function PlusPacotesPage() {
     handleNoteFormClose();
   };
 
+  const handleCopy = (plu: string) => {
+    navigator.clipboard.writeText(plu);
+    setCopiedPlu(plu);
+    setTimeout(() => setCopiedPlu(null), 2000);
+  };
+
   return (
     <div className="flex flex-col h-screen">
        <header className="border-b bg-card backdrop-blur-sm sticky top-0 z-10 md:hidden">
@@ -75,34 +98,71 @@ export default function PlusPacotesPage() {
             </Button>
           </div>
 
-          <ScrollArea className="flex-1 -mx-4">
-             <div className="px-4">
-              {!isLoaded && (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                  {[...Array(8)].map((_, i) => (
-                    <div key={i} className="p-4 border rounded-lg space-y-3">
-                       <Skeleton className="h-5 w-2/3" />
-                       <Skeleton className="h-4 w-1/2" />
-                       <Skeleton className="h-8 w-full" />
-                       <div className="flex gap-2 pt-2">
-                          <Skeleton className="h-5 w-16" />
-                          <Skeleton className="h-5 w-16" />
-                       </div>
-                    </div>
-                  ))}
+          <ScrollArea className="flex-1 -mx-4 rounded-lg border">
+             <div className="p-4 space-y-2">
+              {!isLoaded && [...Array(15)].map((_, i) => (
+                <div key={i} className="flex items-center justify-between gap-2 rounded-md border bg-muted/50 p-2">
+                  <Skeleton className="h-7 w-7" />
+                  <Skeleton className="h-5 w-2/3" />
+                  <Skeleton className="h-7 w-7" />
                 </div>
-              )}
+              ))}
               {isLoaded && filteredNotes.length > 0 && (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                  {filteredNotes.map(note => (
-                    <NoteCard
-                      key={note.id}
-                      note={note}
-                      onEdit={() => handleEdit(note)}
-                      onDelete={() => deleteNote(note.id)}
-                    />
-                  ))}
-                </div>
+                <>
+                  {filteredNotes.map(note => {
+                     const pluMatch = note.content.match(/PLU: (.*)/);
+                     const plu = pluMatch ? pluMatch[1].trim() : '';
+                     return (
+                      <div key={note.id} className="flex items-center justify-between gap-2 rounded-md border bg-muted/50 p-2">
+                        <div className="flex items-center gap-2 truncate">
+                          <Button variant="ghost" size="icon" className="h-7 w-7 flex-shrink-0" onClick={() => handleCopy(plu)}>
+                            {copiedPlu === plu ? <Check className="h-4 w-4 text-green-500" /> : <Copy className="h-4 w-4" />}
+                          </Button>
+                          <p className="font-medium text-sm truncate">
+                            {note.title} - <span className="font-mono">{plu}</span>
+                          </p>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <DropdownMenu>
+                              <DropdownMenuTrigger asChild>
+                                  <Button variant="ghost" size="icon" className="h-7 w-7 flex-shrink-0">
+                                      <MoreVertical className="h-4 w-4" />
+                                  </Button>
+                              </DropdownMenuTrigger>
+                              <DropdownMenuContent align="end">
+                                  <DropdownMenuItem onClick={() => handleEdit(note)}>
+                                      <Edit className="mr-2 h-4 w-4" />
+                                      <span>Editar</span>
+                                  </DropdownMenuItem>
+                                  <AlertDialog>
+                                      <AlertDialogTrigger asChild>
+                                          <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                                              <Trash2 className="mr-2 h-4 w-4 text-destructive" />
+                                              <span className="text-destructive">Deletar</span>
+                                          </DropdownMenuItem>
+                                      </AlertDialogTrigger>
+                                      <AlertDialogContent>
+                                          <AlertDialogHeader>
+                                              <AlertDialogTitle>Você tem certeza?</AlertDialogTitle>
+                                              <AlertDialogDescription>
+                                                  Essa ação não pode ser desfeita. Isso irá deletar o item permanentemente.
+                                              </AlertDialogDescription>
+                                          </AlertDialogHeader>
+                                          <AlertDialogFooter>
+                                              <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                                              <AlertDialogAction onClick={() => deleteNote(note.id)} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+                                                  Deletar
+                                              </AlertDialogAction>
+                                          </AlertDialogFooter>
+                                      </AlertDialogContent>
+                                  </AlertDialog>
+                              </DropdownMenuContent>
+                          </DropdownMenu>
+                        </div>
+                      </div>
+                     )
+                  })}
+                </>
               )}
               {isLoaded && filteredNotes.length === 0 && (
                 <div className="text-center py-20">
