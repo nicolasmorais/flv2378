@@ -116,7 +116,29 @@ const initialData = [
   { title: 'UVA CLARA S/SEMENTE CD KG', content: 'PLU: 260176\nBarcode: ', category: 'Frutas', description: '', tags: [] },
   { title: 'UVA VERMELHA S/SEMENTE KG', content: 'PLU: 260077\nBarcode: ', category: 'Frutas', description: '', tags: [] },
 
-  // Legumes e Verduras
+  // Legumes e Verduras - Tomates
+  { title: 'QA TOMATE CARM 600G', content: 'PLU: 1091922\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
+  { title: 'QA TOMATE CEREJA 200G', content: 'PLU: 1108767\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
+  { title: 'QA TOMATE CEREJA RAMA 200G', content: 'PLU: 4892359\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
+  { title: 'QA TOMATE GRAPE 150G', content: 'PLU: 4414032\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
+  { title: 'QA TOMATE GRAPE 500G', content: 'PLU: 1013021\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
+  { title: 'QA TOMATE ITAL 500G', content: 'PLU: 1091953\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
+  { title: 'QA TOMATE ITALIANO 1KG', content: 'PLU: 4890072\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
+  { title: 'QA TOMATE KIDS SWEET GRAPE', content: 'PLU: 1130128\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
+  { title: 'QA TOMATE P/MOLHO 600G', content: 'PLU: 1109696\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
+  { title: 'TOMATE AMARELO', content: 'PLU: 280419\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
+  { title: 'TOMATE ANDREA 600G', content: 'PLU: 1024812\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
+  { title: 'TOMATE CAQUI GNEL KG', content: 'PLU: 337588\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
+  { title: 'TOMATE CEREJA RAMA', content: 'PLU: 337618\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
+  { title: 'TOMATE CEREJA VERMELHO', content: 'PLU: 280426\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
+  { title: 'TOMATE COMUM GRANEL', content: 'PLU: 287784\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
+  { title: 'TOMATE FONTE CORAÇÃO KG', content: 'PLU: 763844\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
+  { title: 'TOMATE FONTE VERDE KG', content: 'PLU: 358224\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
+  { title: 'TOMATE GRAPE', content: 'PLU: 235631\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
+  { title: 'TOMATE ITALIANO GNEL', content: 'PLU: 357593\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
+  { title: 'TOMATE S GRAPE T DA MÔNICA', content: 'PLU: 3878880\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
+
+  // Legumes e Verduras - Outros
   { title: 'ABOBORA BATÃ', content: 'PLU: 337705\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
   { title: 'ABOBORA JAPONESA', content: 'PLU: 336706\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
   { title: 'ABOBORA MORANGA', content: 'PLU: 336707\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
@@ -141,13 +163,6 @@ const initialData = [
   { title: 'QUIABO', content: 'PLU: 337409\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
   { title: 'REPOLHO VERDE', content: 'PLU: 337410\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
   { title: 'REPOLHO ROXO', content: 'PLU: 337411\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
-  { title: 'TOMATE CAQUI', content: 'PLU: 337415\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
-  { title: 'TOMATE ITALIANO', content: 'PLU: 337416\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
-  { title: 'TOMATE HOLANDES RAMA', content: 'PLU: 337417\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
-  { title: 'TOMATE CEREJA AMARELO', content: 'PLU: 337418\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
-  { title: 'TOMATE GRAPE GREEN KG', content: 'PLU: 337619\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
-  { title: 'TOMATE GRAPE', content: 'PLU: 337617\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
-  { title: 'TOMATE CEREJA RAMA GNEL', content: 'PLU: 337618\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
   
   // Plus/Cortes
   { title: 'MELANCIA CORTE', content: 'PLU: 93521\nBarcode: ', category: 'Plus/Cortes', description: '', tags: [] },
@@ -221,5 +236,7 @@ export async function setupDatabase() {
         // The app should still try to run.
     }
 }
+
+    
 
     
