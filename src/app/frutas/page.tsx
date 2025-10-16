@@ -28,28 +28,29 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
-const frutasCitricas = ['LARANJA PERA', 'LARANJA PERA GNEL KG', 'LARANJA LIMA', 'LIMÃO TAHITI GNEL KG', 'MEXERICA PONKAN', 'MEXERICA RIO'];
-const frutasEspeciais = ['AMEIXA PRETA IMPORTADA', 'AMEIXA ROSADA NACIONAL', 'DAMASCO', 'FIGO', 'KIWI', 'KIWI IMPORTADO', 'NECTARINA IMPORTADA', 'PÊSSEGO IMP GNEL KG', 'PITAYA BRANCA GNEL', 'PITAYA AMARELA NAC GNEL', 'PITAYA VERMELHA GNEL', 'ROMÃ', 'UVA TOMPOSON (GLOBE VERDE)'];
-const macasEPearas = [
-  'MACA FRANCESA CANDINE IMP CD',
-  'MACA FUJI NAC GNEL',
-  'MACA GALA GNEL',
-  'MACA GOLDEN GNEL KG',
-  'MAÇA PINK LANDY',
-  'MACA RED IMP. GNEL',
-  'MACA VERDE IMP. GNEL',
-  'PERA RED - D ANJOU IMP GNEL',
-  'PERA ABATE FETEL IMP KG - 3247181',
-  'PERA ASIATICA GNEL',
-  'PERA BELGA CONFERENCE IMP',
-  'PERA BOSC GNEL KG',
-  'PERA D ANJOU IMP. GNEL',
-  'PERA FORELLE IMP KG',
-  'PERA PACKANS IMP GNEL KG',
-  'PERA PORTUGUESA ROCHA GNEL',
-  'PERA WILLIANS IMP. GNEL',
+const frutasCitricas = [
+  'GRAPEFRUIT IMP GNEL KG',
+  'LARANJA BAHIA IMP GNEL',
+  'LARANJA LIMA KG',
+  'LARANJA PERA GNEL',
+  'LARANJA PERA PARA SUCO KG',
+  'LIMA DA PÉRSIA GNEL',
+  'LIMÃO SICILIANO IMP GNEL',
+  'LIMÃO TAHITI GNEL',
+  'MARACUJÁ AZEDO GNEL',
+  'MINI TANGERINA IMPORTADA KG',
+  'QA LARANJA BAHIA 2KG',
+  'QA LARANJA LIMA 2KG',
+  'QA LARANJA PERA 3KG',
+  'QA LIMÃO TAHITI 1KG',
+  'TANGELINA PONKAN GNEL',
+  'TANGERINA CRAVO GNEL KG',
+  'TANGERINA DECOPON',
+  'TANGERINA IMPORTADA',
+  'TANGERINA MURKOT GNEL',
+  'TANGERINA NAC VERONA KG',
+  'TANGERINA RIO GNEL KG',
 ];
-const frutasTropicais = ['ABACATE', 'ABACAXI PEROLA UND', 'AVOCADO', 'BANANA OURO GNEL KG', 'BANANA MAÇA ORGÂNICA', 'BANANA NANICA ORGÂNICA', 'BANANA PRATA', 'BANANA TERRA', 'MAMÃO FORMOSA', 'MAMÃO PAPAYA GOLDEN GNEL KG', 'MANGA HADEN', 'MANGA PALMER GNEL KG', 'MARACUJÁ AZEDO', 'MELANCIA', 'MELÃO AMARELO', 'MELÃO CANTALOUPE NAC GNEL KG', 'MELÃO ORANGE', 'MELÃO GALEA'];
 
 
 const CategoryCard = ({
@@ -81,7 +82,7 @@ const CategoryCard = ({
       <CardContent>
         <ScrollArea className="h-96">
           <div className="space-y-2 pr-4">
-            {isLoading && [...Array(5)].map((_, i) => (
+            {isLoading && [...Array(15)].map((_, i) => (
               <div key={i} className="flex items-center justify-between gap-2 rounded-md border bg-muted/50 p-2">
                 <Skeleton className="h-7 w-7" />
                 <Skeleton className="h-5 w-2/3" />
@@ -97,7 +98,7 @@ const CategoryCard = ({
                       {copiedPlu === plu ? <Check className="h-4 w-4 text-green-500" /> : <Copy className="h-4 w-4" />}
                     </Button>
                     <div className="truncate flex items-baseline gap-2">
-                      <span className="font-mono text-2xl font-bold">{plu}</span>
+                      <span className="font-mono text-xl font-bold">{plu}</span>
                       <span className="font-medium text-base uppercase">{note.title.toUpperCase()}</span>
                     </div>
                   </div>
@@ -159,7 +160,7 @@ export default function FrutasPage() {
 
   const filterNotesByTitle = (titles: string[]) => {
     return notes
-      .filter(note => titles.includes(note.title))
+      .filter(note => note.category === 'Frutas' && titles.includes(note.title))
       .sort((a, b) => a.title.localeCompare(b.title));
   };
   
@@ -212,27 +213,6 @@ export default function FrutasPage() {
                 <CategoryCard
                     category="Frutas Cítricas"
                     notes={filterNotesByTitle(frutasCitricas)}
-                    isLoading={!isLoaded}
-                    onEdit={handleEdit}
-                    onDelete={deleteNote}
-                />
-                <CategoryCard
-                    category="Frutas Especiais"
-                    notes={filterNotesByTitle(frutasEspeciais)}
-                    isLoading={!isLoaded}
-                    onEdit={handleEdit}
-                    onDelete={deleteNote}
-                />
-                <CategoryCard
-                    category="Maçãs e Pêras"
-                    notes={filterNotesByTitle(macasEPearas)}
-                    isLoading={!isLoaded}
-                    onEdit={handleEdit}
-                    onDelete={deleteNote}
-                />
-                <CategoryCard
-                    category="Frutas Tropicais"
-                    notes={filterNotesByTitle(frutasTropicais)}
                     isLoading={!isLoaded}
                     onEdit={handleEdit}
                     onDelete={deleteNote}
