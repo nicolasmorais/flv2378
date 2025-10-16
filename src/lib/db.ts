@@ -137,32 +137,6 @@ const initialData = [
   { title: 'TOMATE GRAPE', content: 'PLU: 235631\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
   { title: 'TOMATE ITALIANO GNEL', content: 'PLU: 357593\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
   { title: 'TOMATE S GRAPE T DA MÔNICA', content: 'PLU: 3878880\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
-
-  // Legumes e Verduras - Outros
-  { title: 'ABOBORA BATÃ', content: 'PLU: 337705\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
-  { title: 'ABOBORA JAPONESA', content: 'PLU: 336706\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
-  { title: 'ABOBORA MORANGA', content: 'PLU: 336707\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
-  { title: 'ABOBORA SECA', content: 'PLU: 336698\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
-  { title: 'ABOBORA BAHIANA', content: 'PLU: 336699\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
-  { title: 'MINI ABOBORA PUMPKING KG', content: 'PLU: 336700\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
-  { title: 'ABOBRINHA BRASILEIRA', content: 'PLU: 225626\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
-  { title: 'ABOBRINHA ITALIANA', content: 'PLU: 225625\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
-  { title: 'ABOBRINHA CHINESA', content: 'PLU: 225623\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
-  { title: 'BATATA COMUM', content: 'PLU: 297045\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
-  { title: 'BATATA DOCE BRANCA', content: 'PLU: 357695\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
-  { title: 'BATATA DOCE ROXA', content: 'PLU: 357694\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
-  { title: 'BATATA ROSADA ASTERIX', content: 'PLU: 336693\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
-  { title: 'BETERRABA', content: 'PLU: 336691\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
-  { title: 'CENOURA', content: 'PLU: 337815\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
-  { title: 'CEBOLA BRANCA', content: 'PLU: 297159\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
-  { title: 'CEBOLA NACIONAL', content: 'PLU: 257577\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
-  { title: 'GENGIBRE', content: 'PLU: 287085\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
-  { title: 'INHAME', content: 'PLU: 337799\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
-  { title: 'MANDIOQUINHA', content: 'PLU: 337775\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
-  { title: 'ALCACHOFRA GRAUDA', content: 'PLU: 2228655\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
-  { title: 'QUIABO', content: 'PLU: 337409\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
-  { title: 'REPOLHO VERDE', content: 'PLU: 337410\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
-  { title: 'REPOLHO ROXO', content: 'PLU: 337411\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
   
   // Plus/Cortes
   { title: 'MELANCIA CORTE', content: 'PLU: 93521\nBarcode: ', category: 'Plus/Cortes', description: '', tags: [] },
@@ -236,7 +210,3 @@ export async function setupDatabase() {
         // The app should still try to run.
     }
 }
-
-    
-
-    

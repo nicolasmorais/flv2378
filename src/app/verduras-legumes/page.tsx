@@ -166,13 +166,6 @@ export default function VerdurasLegumesPage() {
       .sort((a, b) => a.title.localeCompare(b.title));
   };
   
-  const getOtherNotes = () => {
-      const allCategorizedTitles = [...tomates];
-      return notes
-        .filter(note => note.category === 'Legumes e Verduras' && !allCategorizedTitles.includes(note.title))
-        .sort((a, b) => a.title.localeCompare(b.title));
-  }
-
   const handleEdit = (note: Note) => {
     setEditingNote(note);
     setNoteFormOpen(true);
@@ -225,13 +218,6 @@ export default function VerdurasLegumesPage() {
                   onEdit={handleEdit}
                   onDelete={deleteNote}
               />
-              <CategoryCard
-                  category="Outros Legumes e Verduras"
-                  notes={getOtherNotes()}
-                  isLoading={!isLoaded}
-                  onEdit={handleEdit}
-                  onDelete={deleteNote}
-              />
           </div>
         </div>
       </main>
@@ -246,5 +232,3 @@ export default function VerdurasLegumesPage() {
     </div>
   );
 }
-
-    
