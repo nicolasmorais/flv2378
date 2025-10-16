@@ -52,6 +52,26 @@ const frutasCitricas = [
   'TANGERINA RIO GNEL KG',
 ];
 
+const macasEPearas = [
+  'MAÇÃ FRANCESA CANDINE IMP CD',
+  'MAÇÃ FUJI NAC GNEL',
+  'MAÇÃ GALA GNEL',
+  'MAÇÃ GOLDEN GNEL KG',
+  'MAÇÃ PINK LANDY',
+  'MAÇÃ RED IMP GNEL',
+  'MAÇÃ VERDE IMP GNEL',
+  'PERA RED - D ANJOU IMP GNEL',
+  'PERA ABATE FETEL IMP KG - 3247181',
+  'PERA ASIÁTICA GNEL',
+  'PERA BELGA CONFERENCE IMP',
+  'PERA BOSC GNEL KG',
+  'PERA D ANJOU IMP GNEL',
+  'PERA FORELLE IMP KG',
+  'PERA PACKANS IMP GNEL KG',
+  'PERA PORTUGUESA ROCHA GNEL',
+  'PERA WILLIANS IMP GNEL',
+];
+
 
 const CategoryCard = ({
   category,
@@ -98,8 +118,8 @@ const CategoryCard = ({
                       {copiedPlu === plu ? <Check className="h-4 w-4 text-green-500" /> : <Copy className="h-4 w-4" />}
                     </Button>
                     <div className="truncate flex items-baseline gap-2">
-                      <span className="font-mono text-xl font-bold">{plu}</span>
-                      <span className="font-medium text-base uppercase">{note.title.toUpperCase()}</span>
+                        <span className="font-mono text-xl font-bold">{plu}</span>
+                        <span className="font-medium text-base uppercase">{note.title.toUpperCase()}</span>
                     </div>
                   </div>
                   <div className="flex items-center gap-1">
@@ -213,6 +233,13 @@ export default function FrutasPage() {
                 <CategoryCard
                     category="Frutas Cítricas"
                     notes={filterNotesByTitle(frutasCitricas)}
+                    isLoading={!isLoaded}
+                    onEdit={handleEdit}
+                    onDelete={deleteNote}
+                />
+                 <CategoryCard
+                    category="Maçãs e Pêras"
+                    notes={filterNotesByTitle(macasEPearas)}
                     isLoading={!isLoaded}
                     onEdit={handleEdit}
                     onDelete={deleteNote}

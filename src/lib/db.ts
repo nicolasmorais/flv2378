@@ -4,7 +4,7 @@
 import { sql } from '@vercel/postgres';
 
 const initialData = [
-  // Novas Frutas Cítricas
+  // Frutas Cítricas
   { title: 'GRAPEFRUIT IMP GNEL KG', content: 'PLU: 251174\nBarcode: ', category: 'Frutas', description: '', tags: [] },
   { title: 'LARANJA BAHIA IMP GNEL', content: 'PLU: 247139\nBarcode: ', category: 'Frutas', description: '', tags: [] },
   { title: 'LARANJA LIMA KG', content: 'PLU: 247269\nBarcode: ', category: 'Frutas', description: '', tags: [] },
@@ -26,6 +26,25 @@ const initialData = [
   { title: 'TANGERINA MURKOT GNEL', content: 'PLU: 248198\nBarcode: ', category: 'Frutas', description: '', tags: [] },
   { title: 'TANGERINA NAC VERONA KG', content: 'PLU: 150491\nBarcode: ', category: 'Frutas', description: '', tags: [] },
   { title: 'TANGERINA RIO GNEL KG', content: 'PLU: 248259\nBarcode: ', category: 'Frutas', description: '', tags: [] },
+
+  // Maçãs e Pêras
+  { title: 'MAÇÃ FRANCESA CANDINE IMP CD', content: 'PLU: 755597\nBarcode: ', category: 'Frutas', description: '', tags: [] },
+  { title: 'MAÇÃ FUJI NAC GNEL', content: 'PLU: 247528\nBarcode: ', category: 'Frutas', description: '', tags: [] },
+  { title: 'MAÇÃ GALA GNEL', content: 'PLU: 247634\nBarcode: ', category: 'Frutas', description: '', tags: [] },
+  { title: 'MAÇÃ GOLDEN GNEL KG', content: 'PLU: 247641\nBarcode: ', category: 'Frutas', description: '', tags: [] },
+  { title: 'MAÇÃ PINK LANDY', content: 'PLU: 389327\nBarcode: ', category: 'Frutas', description: '', tags: [] },
+  { title: 'MAÇÃ RED IMP GNEL', content: 'PLU: 219617\nBarcode: ', category: 'Frutas', description: '', tags: [] },
+  { title: 'MAÇÃ VERDE IMP GNEL', content: 'PLU: 196574\nBarcode: ', category: 'Frutas', description: '', tags: [] },
+  { title: 'PERA RED - D ANJOU IMP GNEL', content: 'PLU: 381994\nBarcode: ', category: 'Frutas', description: '', tags: [] },
+  { title: 'PERA ABATE FETEL IMP KG - 3247181', content: 'PLU: 389389\nBarcode: ', category: 'Frutas', description: '', tags: [] },
+  { title: 'PERA ASIÁTICA GNEL', content: 'PLU: 259729\nBarcode: ', category: 'Frutas', description: '', tags: [] },
+  { title: 'PERA BELGA CONFERENCE IMP', content: 'PLU: 389341\nBarcode: ', category: 'Frutas', description: '', tags: [] },
+  { title: 'PERA BOSC GNEL KG', content: 'PLU: 247993\nBarcode: ', category: 'Frutas', description: '', tags: [] },
+  { title: 'PERA D ANJOU IMP GNEL', content: 'PLU: 248594\nBarcode: ', category: 'Frutas', description: '', tags: [] },
+  { title: 'PERA FORELLE IMP KG', content: 'PLU: 147903\nBarcode: ', category: 'Frutas', description: '', tags: [] },
+  { title: 'PERA PACKANS IMP GNEL KG', content: 'PLU: 248006\nBarcode: ', category: 'Frutas', description: '', tags: [] },
+  { title: 'PERA PORTUGUESA ROCHA GNEL', content: 'PLU: 248013\nBarcode: ', category: 'Frutas', description: '', tags: [] },
+  { title: 'PERA WILLIANS IMP GNEL', content: 'PLU: 248037\nBarcode: ', category: 'Frutas', description: '', tags: [] },
 
   // Legumes e Verduras
   { title: 'ABOBORA BATÃ', content: 'PLU: 337705\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
