@@ -51,6 +51,14 @@ const tomates = [
     'TOMATE S GRAPE T DA MÔNICA',
 ];
 
+const aboboras = [
+    'ABÓBORA BATÁ KG',
+    'ABÓBORA JAPONESA GNEL',
+    'ABÓBORA MORANGA GNEL',
+    'ABÓBORA PAULISTA GNEL',
+    'ABÓBORA SECA GNEL',
+];
+
 
 const CategoryCard = ({
   category,
@@ -214,6 +222,13 @@ export default function VerdurasLegumesPage() {
               <CategoryCard
                   category="Tomates"
                   notes={filterNotesByTitle(tomates)}
+                  isLoading={!isLoaded}
+                  onEdit={handleEdit}
+                  onDelete={deleteNote}
+              />
+              <CategoryCard
+                  category="Abóboras"
+                  notes={filterNotesByTitle(aboboras)}
                   isLoading={!isLoaded}
                   onEdit={handleEdit}
                   onDelete={deleteNote}

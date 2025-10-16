@@ -138,6 +138,13 @@ const initialData = [
   { title: 'TOMATE ITALIANO GNEL', content: 'PLU: 357593\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
   { title: 'TOMATE S GRAPE T DA MÔNICA', content: 'PLU: 3878880\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
   
+  // Legumes e Verduras - Abóboras
+  { title: 'ABÓBORA BATÁ KG', content: 'PLU: 224772\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
+  { title: 'ABÓBORA JAPONESA GNEL', content: 'PLU: 336703\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
+  { title: 'ABÓBORA MORANGA GNEL', content: 'PLU: 336765\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
+  { title: 'ABÓBORA PAULISTA GNEL', content: 'PLU: 336772\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
+  { title: 'ABÓBORA SECA GNEL', content: 'PLU: 336826\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
+
   // Plus/Cortes
   { title: 'MELANCIA CORTE', content: 'PLU: 93521\nBarcode: ', category: 'Plus/Cortes', description: '', tags: [] },
   { title: 'COCO SECO QUEBRADO', content: 'PLU: 352048\nBarcode: ', category: 'Plus/Cortes', description: '', tags: [] },
