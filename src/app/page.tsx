@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { PlusCircle, Copy, Check, MoreVertical, Edit, Trash2, RotateCcw } from 'lucide-react';
@@ -29,7 +29,68 @@ import {
 } from "@/components/ui/alert-dialog";
 import { clearAndReseedDatabase } from '@/app/actions';
 
-type Category = 'Frutas' | 'Legumes e Verduras' | 'Outros' | 'Plus/Pacotes' | 'Plus/Cortes';
+type Category = 'Frutas' | 'Legumes e Verduras' | 'Outros' | 'Plus/Pacotes' | 'Plus/Cortes' | 'Folhagem' | 'Preço Livre Diário';
+
+const frutasCitricas = [
+  'GRAPEFRUIT IMP GNEL KG', 'LARANJA BAHIA IMP GNEL', 'LARANJA LIMA KG', 'LARANJA PERA GNEL', 
+  'LARANJA PERA PARA SUCO KG', 'LIMA DA PÉRSIA GNEL', 'LIMÃO SICILIANO IMP GNEL', 'LIMÃO TAHITI GNEL', 
+  'MARACUJÁ AZEDO GNEL', 'MINI TANGERINA IMPORTADA KG', 'QA LARANJA BAHIA 2KG', 'QA LARANJA LIMA 2KG', 
+  'QA LARANJA PERA 3KG', 'QA LIMÃO TAHITI 1KG', 'TANGELINA PONKAN GNEL', 'TANGERINA CRAVO GNEL KG', 
+  'TANGERINA DECOPON', 'TANGERINA IMPORTADA', 'TANGERINA MURKOT GNEL', 'TANGERINA NAC VERONA KG', 'TANGERINA RIO GNEL KG'
+];
+
+const macasEPearas = [
+  'MAÇÃ FRANCESA CANDINE IMP CD', 'MAÇÃ FUJI NAC GNEL', 'MAÇÃ GALA GNEL', 'MAÇÃ GOLDEN GNEL KG', 
+  'MAÇÃ PINK LANDY', 'MAÇÃ RED IMP GNEL', 'MAÇÃ VERDE IMP GNEL', 'PERA RED - D ANJOU IMP GNEL', 
+  'PERA ABATE FETEL IMP KG - 3247181', 'PERA ASIÁTICA GNEL', 'PERA BELGA CONFERENCE IMP', 'PERA BOSC GNEL KG', 
+  'PERA D ANJOU IMP GNEL', 'PERA FORELLE IMP KG', 'PERA PACKANS IMP GNEL KG', 'PERA PORTUGUESA ROCHA GNEL', 'PERA WILLIANS IMP GNEL'
+];
+
+const frutasEspeciais = [
+  'AMEIXA IMPORTADA KG', 'AMEIXA ROSADA', 'ATEMOYA GNEL', 'AVOCADO GNEL KG', 'CACAU KG', 
+  'CAQUI CHOCOLATE GNEL', 'CAQUI FUYU NACIONAL GNEL', 'CAQUI IMPORTADO KG', 'CAQUI RAMAFORTE GNEL', 
+  'CEREJA IMP KG', 'DAMASCO GRANEL KG', 'FRUTA DO CONDE GNEL', 'GOIABA BRANCA GNEL', 'GOIABA VERMELHA GNEL', 
+  'GRANADILLA IMPORTADA CD UN', 'GRAVIOLA GNEL KG', 'JAMELÃO', 'KIWI GOLD ZESPRI', 'KIWI IMP VERDE GNEL', 
+  'MANGA BOURBON GNEL', 'MANGA ESPADA GNEL', 'MANGA HADEN GNEL', 'MANGA KEIT GNEL', 'MANGA PALMER NAC GNEL', 
+  'MANGA ROSA GNEL', 'MANGA SHELLY', 'MANGA TOMMY GNEL', 'MANGOSTIN KG', 'NECTARINA IMP GNEL', 
+  'NECTARINA NAC GNEL KG', 'NOZES C/CASCA GRANEL IMP', 'PÊSSEGO IMP GNEL', 'PÊSSEGO NAC GNEL', 
+  'PITAYA AMARELA IMP', 'PITAYA BRANCA', 'PITAYA VERMELHA', 'ROMÃ IMP', 'UVA VITÓRIA GNEL KG'
+];
+
+const frutasTropicais = [
+  'ABACAXI GOLD', 'ABACAXI HAWAI', 'ABACAXI PÉROLA', 'CASTANHA PORTUGUESA GNEL', 'COCO SECO GNEL', 
+  'COCO VERDE', 'COCO VERDE PARA GARRAFA UN', 'MELANCIA AMARELA KG', 'MELANCIA BABY', 'MELANCIA GRANEL KG', 
+  'MELANCIA MAGALI KG', 'MELANCIA PINGO DOCE KG', 'MELANCIA SOLINDA (PERSONAL)', 'MELÃO AMARELO NAC GNEL', 
+  'MELÃO AMARELO REI KG', 'MELÃO CANTALOUP NAC GNEL KG', 'MELÃO CHARANTEAIS GNEL', 'MELÃO DINO KG', 
+  'MELÃO FORMOSA GNEL KG', 'MELÃO GALIA GNEL', 'MELÃO MELUNA KG', 'MELÃO ORANGE GNEL', 
+  'MELÃO PELE DE SAPO REI GNEL', 'MELÃO VERDE GNEL', 'QA MELÃO AMARELO KG', 'TÂMARA A GRANEL KG', 
+  'UVA CLARA S/SEMENTE CD KG', 'UVA VERMELHA S/SEMENTE KG'
+];
+
+const tomates = [
+    'QA TOMATE CARM 600G', 'QA TOMATE CEREJA 200G', 'QA TOMATE CEREJA RAMA 200G', 'QA TOMATE GRAPE 150G',
+    'QA TOMATE GRAPE 500G', 'QA TOMATE ITAL 500G', 'QA TOMATE ITALIANO 1KG', 'QA TOMATE KIDS SWEET GRAPE',
+    'QA TOMATE P/MOLHO 600G', 'TOMATE AMARELO', 'TOMATE ANDREA 600G', 'TOMATE CAQUI GNEL KG',
+    'TOMATE CEREJA RAMA', 'TOMATE CEREJA VERMELHO', 'TOMATE COMUM GRANEL', 'TOMATE FONTE CORAÇÃO KG',
+    'TOMATE FONTE VERDE KG', 'TOMATE GRAPE', 'TOMATE ITALIANO GNEL', 'TOMATE S GRAPE T DA MÔNICA'
+];
+
+const aboboras = [
+    'ABÓBORA BATÁ KG', 'ABÓBORA JAPONESA GNEL', 'ABÓBORA MORANGA GNEL', 'ABÓBORA PAULISTA GNEL', 'ABÓBORA SECA GNEL'
+];
+
+const legumesETuberculos = [
+    'ABOBRINHA ITALIANA GNEL', 'ABOBRINHA BRASIL EXTRA GNEL', 'ALCACHOFRA UN', 'ALHO DENTE POTE', 'ALHO GRAÚDO GNEL',
+    'BATATA ASTERIX', 'BATATA COMUM GNEL', 'BATATA DOCE BRANCA GNEL', 'BATATA DOCE ROSADA GNEL', 'BETERRABA EXTRA GNEL',
+    'BERINJELA GNEL', 'CARÁ GNEL', 'CENOURA GNEL', 'CEBOLA BRANCA IMP KG', 'CEBOLA GRANEL', 'CEBOLA ROXA GNEL',
+    'CHUCHU EXTRA GNEL', 'GENGIBRE GNEL', 'INHAME GNEL', 'MANDIOCA GNEL', 'MANDIOQUINHA GNEL', 'PEPINO JAPONÊS EXTRA GNEL',
+    'PEPINO COMUM EXTRA GNEL', 'PEPINO CAIPIRA GRANEL', 'PIMENTÃO VERMELHO GNEL', 'PIMENTÃO VERDE EXTRA GNEL',
+    'PIMENTÃO AMARELO GNEL', 'PINHÃO KG', 'REPOLHO ROXO GNEL', 'REPOLHO VERDE GNEL', 'VAGEM MACARRÃO EXTRA GNEL'
+];
+
+const cogumelos = [
+    'COGUMELO PARIS KG', 'COGUMELO SHITAKE KG', 'COGUMELO SHIMEJI BRANCO KG', 'COGUMELO PORTOBELO KG'
+];
 
 const CategoryCard = ({ 
   category, 
@@ -38,13 +99,15 @@ const CategoryCard = ({
   onAddNew,
   onEdit,
   onDelete,
+  mainCategory,
 }: { 
-  category: Category;
+  category: string;
   notes: Note[];
   isLoading: boolean;
   onAddNew: (category: Category) => void;
   onEdit: (note: Note) => void;
   onDelete: (id: string) => void;
+  mainCategory: Category;
 }) => {
   const [copiedPlu, setCopiedPlu] = useState<string | null>(null);
 
@@ -58,13 +121,13 @@ const CategoryCard = ({
     <Card className="flex flex-col">
       <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle className="text-xl">{category}</CardTitle>
-        <Button size="sm" onClick={() => onAddNew(category)}>
+        <Button size="sm" onClick={() => onAddNew(mainCategory)}>
           <PlusCircle className="mr-2 h-4 w-4" />
           Cadastrar
         </Button>
       </CardHeader>
       <CardContent>
-        <ScrollArea className="h-[34rem]">
+        <ScrollArea className="h-96">
           <div className="space-y-2 pr-4">
             {isLoading && [...Array(14)].map((_, i) => (
               <div key={i} className="flex items-center justify-between gap-2 rounded-md border bg-muted/50 p-2">
@@ -186,7 +249,6 @@ export default function Home() {
     if (result.success) {
       await loadNotes();
     } else {
-      // Handle error, maybe show a toast
       console.error(result.error);
     }
   };
@@ -194,6 +256,12 @@ export default function Home() {
   const filterNotesByCategory = (category: Category) => {
     return notes
       .filter(note => note.category === category)
+      .sort((a, b) => a.title.localeCompare(b.title));
+  };
+  
+  const filterNotesByTitle = (mainCategory: Category, titles: string[]) => {
+    return notes
+      .filter(note => note.category === mainCategory && titles.includes(note.title))
       .sort((a, b) => a.title.localeCompare(b.title));
   };
 
@@ -226,38 +294,87 @@ export default function Home() {
             </AlertDialog>
           </div>
           
-          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 mb-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-6">
             <CategoryCard 
-              category="Frutas"
-              notes={filterNotesByCategory('Frutas')}
+              category="Frutas Cítricas"
+              notes={filterNotesByTitle('Frutas', frutasCitricas)}
               isLoading={!isLoaded}
               onAddNew={handleAddNew}
               onEdit={handleEdit}
               onDelete={deleteNote}
+              mainCategory="Frutas"
             />
             <CategoryCard 
-              category="Legumes e Verduras"
-              notes={filterNotesByCategory('Legumes e Verduras')}
+              category="Maçãs e Pêras"
+              notes={filterNotesByTitle('Frutas', macasEPearas)}
               isLoading={!isLoaded}
               onAddNew={handleAddNew}
               onEdit={handleEdit}
               onDelete={deleteNote}
+              mainCategory="Frutas"
             />
             <CategoryCard 
-              category="Outros"
-              notes={filterNotesByCategory('Outros')}
+              category="Frutas Especiais"
+              notes={filterNotesByTitle('Frutas', frutasEspeciais)}
               isLoading={!isLoaded}
               onAddNew={handleAddNew}
               onEdit={handleEdit}
               onDelete={deleteNote}
+              mainCategory="Frutas"
             />
-             <CategoryCard 
+            <CategoryCard 
+              category="Frutas Tropicais"
+              notes={filterNotesByTitle('Frutas', frutasTropicais)}
+              isLoading={!isLoaded}
+              onAddNew={handleAddNew}
+              onEdit={handleEdit}
+              onDelete={deleteNote}
+              mainCategory="Frutas"
+            />
+            <CategoryCard 
+              category="Tomates"
+              notes={filterNotesByTitle('Legumes e Verduras', tomates)}
+              isLoading={!isLoaded}
+              onAddNew={handleAddNew}
+              onEdit={handleEdit}
+              onDelete={deleteNote}
+              mainCategory="Legumes e Verduras"
+            />
+            <CategoryCard 
+              category="Abóboras"
+              notes={filterNotesByTitle('Legumes e Verduras', aboboras)}
+              isLoading={!isLoaded}
+              onAddNew={handleAddNew}
+              onEdit={handleEdit}
+              onDelete={deleteNote}
+              mainCategory="Legumes e Verduras"
+            />
+            <CategoryCard 
+              category="Legumes e Tubérculos"
+              notes={filterNotesByTitle('Legumes e Verduras', legumesETuberculos)}
+              isLoading={!isLoaded}
+              onAddNew={handleAddNew}
+              onEdit={handleEdit}
+              onDelete={deleteNote}
+              mainCategory="Legumes e Verduras"
+            />
+            <CategoryCard 
+              category="Cogumelos a Granel"
+              notes={filterNotesByTitle('Legumes e Verduras', cogumelos)}
+              isLoading={!isLoaded}
+              onAddNew={handleAddNew}
+              onEdit={handleEdit}
+              onDelete={deleteNote}
+              mainCategory="Legumes e Verduras"
+            />
+            <CategoryCard 
               category="Plus/Pacotes"
               notes={filterNotesByCategory('Plus/Pacotes')}
               isLoading={!isLoaded}
               onAddNew={handleAddNew}
               onEdit={handleEdit}
               onDelete={deleteNote}
+              mainCategory="Plus/Pacotes"
             />
              <CategoryCard 
               category="Plus/Cortes"
@@ -266,6 +383,25 @@ export default function Home() {
               onAddNew={handleAddNew}
               onEdit={handleEdit}
               onDelete={deleteNote}
+              mainCategory="Plus/Cortes"
+            />
+            <CategoryCard 
+              category="Folhagem"
+              notes={filterNotesByCategory('Folhagem')}
+              isLoading={!isLoaded}
+              onAddNew={handleAddNew}
+              onEdit={handleEdit}
+              onDelete={deleteNote}
+              mainCategory="Folhagem"
+            />
+            <CategoryCard 
+              category="Outros"
+              notes={filterNotesByCategory('Outros')}
+              isLoading={!isLoaded}
+              onAddNew={handleAddNew}
+              onEdit={handleEdit}
+              onDelete={deleteNote}
+              mainCategory="Outros"
             />
           </div>
         </div>
