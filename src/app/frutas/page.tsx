@@ -96,9 +96,10 @@ const CategoryCard = ({
                     <Button variant="ghost" size="icon" className="h-7 w-7 flex-shrink-0" onClick={() => handleCopy(plu)}>
                       {copiedPlu === plu ? <Check className="h-4 w-4 text-green-500" /> : <Copy className="h-4 w-4" />}
                     </Button>
-                    <p className="font-medium text-sm truncate">
-                      <span className="font-mono">{plu}</span> - {note.title.toUpperCase()}
-                    </p>
+                    <div className="truncate flex items-baseline gap-2">
+                      <span className="font-mono text-2xl font-bold">{plu}</span>
+                      <span className="font-medium text-base uppercase">{note.title.toUpperCase()}</span>
+                    </div>
                   </div>
                   <div className="flex items-center gap-1">
                     <DropdownMenu>
