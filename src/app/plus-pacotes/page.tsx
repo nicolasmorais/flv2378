@@ -105,14 +105,16 @@ export default function PlusPacotesPage() {
                      const plu = pluMatch ? pluMatch[1].trim() : '';
                      return (
                       <div key={note.id} className="flex items-center justify-between gap-2 rounded-md border bg-muted/50 p-2">
-                        <div className="flex items-center gap-1 truncate">
-                          <span className="w-6 text-sm font-medium text-muted-foreground">{index + 1}.</span>
-                          <Button variant="ghost" size="icon" className="h-7 w-7 flex-shrink-0" onClick={() => handleCopy(plu)}>
-                            {copiedPlu === plu ? <Check className="h-4 w-4 text-green-500" /> : <Copy className="h-4 w-4" />}
-                          </Button>
+                        <div className="flex items-center gap-2 truncate">
+                           <div className="flex items-center">
+                                <span className="w-6 text-sm font-medium text-muted-foreground">{index + 1}.</span>
+                                <Button variant="ghost" size="icon" className="h-7 w-7 flex-shrink-0" onClick={() => handleCopy(plu)}>
+                                    {copiedPlu === plu ? <Check className="h-4 w-4 text-green-500" /> : <Copy className="h-4 w-4" />}
+                                </Button>
+                            </div>
                           <div className="truncate">
                             <span className="font-mono text-2xl font-bold">{plu}</span>
-                            <span className="font-medium text-xs uppercase text-muted-foreground"> - {note.title.toUpperCase()}</span>
+                            <span className="font-medium text-sm uppercase text-muted-foreground"> - {note.title.toUpperCase()}</span>
                           </div>
                         </div>
                         <div className="flex items-center gap-1">
