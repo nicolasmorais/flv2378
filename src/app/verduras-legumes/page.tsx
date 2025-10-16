@@ -110,9 +110,9 @@ export default function VerdurasLegumesPage() {
                           <Button variant="ghost" size="icon" className="h-7 w-7 flex-shrink-0" onClick={() => handleCopy(plu)}>
                             {copiedPlu === plu ? <Check className="h-4 w-4 text-green-500" /> : <Copy className="h-4 w-4" />}
                           </Button>
-                          <div className="truncate flex flex-col">
+                          <div className="truncate">
                             <span className="font-mono text-xl font-bold">{plu}</span>
-                            <span className="font-medium text-xs uppercase text-muted-foreground">{note.title.toUpperCase()}</span>
+                            <span className="font-medium text-xs uppercase text-muted-foreground"> - {note.title.toUpperCase()}</span>
                           </div>
                         </div>
                         <div className="flex items-center gap-1">
