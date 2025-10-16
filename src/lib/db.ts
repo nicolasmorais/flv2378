@@ -177,6 +177,11 @@ const initialData = [
   { title: 'REPOLHO ROXO GNEL', content: 'PLU: 339193\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
   { title: 'REPOLHO VERDE GNEL', content: 'PLU: 339131\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
   { title: 'VAGEM MACARRÃO EXTRA GNEL', content: 'PLU: 337748\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
+  { title: 'COGUMELO PARIS KG', content: 'PLU: 297554\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
+  { title: 'COGUMELO SHITAKE KG', content: 'PLU: 269247\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
+  { title: 'COGUMELO SHIMEJI BRANCO KG', content: 'PLU: 269100\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
+  { title: 'COGUMELO PORTOBELO KG', content: 'PLU: 269254\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
+
 
   // Plus/Cortes
   { title: 'MELANCIA CORTE', content: 'PLU: 93521\nBarcode: ', category: 'Plus/Cortes', description: '', tags: [] },

@@ -93,6 +93,13 @@ const legumesETuberculos = [
     'VAGEM MACARRÃO EXTRA GNEL',
 ];
 
+const cogumelos = [
+    'COGUMELO PARIS KG',
+    'COGUMELO SHITAKE KG',
+    'COGUMELO SHIMEJI BRANCO KG',
+    'COGUMELO PORTOBELO KG',
+];
+
 
 const CategoryCard = ({
   category,
@@ -134,7 +141,7 @@ const CategoryCard = ({
               const plu = pluMatch ? pluMatch[1].trim() : '';
               return (
                 <div key={note.id} className="flex items-center justify-between gap-2 rounded-md border bg-muted/50 p-2">
-                  <div className="flex items-center gap-2 truncate">
+                  <div className="flex items-center gap-1 truncate">
                     <div className="flex items-center">
                         <span className="w-6 text-sm font-medium text-muted-foreground">{index + 1}.</span>
                         <Button variant="ghost" size="icon" className="h-7 w-7 flex-shrink-0" onClick={() => handleCopy(plu)}>
@@ -270,6 +277,13 @@ export default function VerdurasLegumesPage() {
               <CategoryCard
                   category="Legumes e Tubérculos"
                   notes={filterNotesByTitle(legumesETuberculos)}
+                  isLoading={!isLoaded}
+                  onEdit={handleEdit}
+                  onDelete={deleteNote}
+              />
+              <CategoryCard
+                  category="Cogumelos a Granel"
+                  notes={filterNotesByTitle(cogumelos)}
                   isLoading={!isLoaded}
                   onEdit={handleEdit}
                   onDelete={deleteNote}
