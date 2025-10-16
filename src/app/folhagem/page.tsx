@@ -109,7 +109,7 @@ export default function FolhagemPage() {
                             {copiedPlu === plu ? <Check className="h-4 w-4 text-green-500" /> : <Copy className="h-4 w-4" />}
                           </Button>
                           <p className="font-medium text-sm truncate">
-                            {note.title} - <span className="font-mono">{plu}</span>
+                            <span className="font-mono">{plu}</span> - {note.title.toUpperCase()}
                           </p>
                         </div>
                         <div className="flex items-center gap-1">
