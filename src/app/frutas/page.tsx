@@ -288,7 +288,7 @@ export default function FrutasPage() {
                     onDelete={deleteNote}
                 />
                 <CategoryCard
-                    category="FRUTAS ESPECIAIS"
+                    category="Frutas Especiais"
                     notes={filterNotesByTitle(frutasEspeciais)}
                     isLoading={!isLoaded}
                     onEdit={handleEdit}
@@ -309,5 +309,3 @@ export default function FrutasPage() {
     </div>
   );
 }
-
-    
