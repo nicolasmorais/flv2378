@@ -72,6 +72,46 @@ const macasEPearas = [
   'PERA WILLIANS IMP GNEL',
 ];
 
+const frutasEspeciais = [
+  'AMEIXA IMPORTADA KG',
+  'AMEIXA ROSADA',
+  'ATEMOYA GNEL',
+  'AVOCADO GNEL KG',
+  'CACAU KG',
+  'CAQUI CHOCOLATE GNEL',
+  'CAQUI FUYU NACIONAL GNEL',
+  'CAQUI IMPORTADO KG',
+  'CAQUI RAMAFORTE GNEL',
+  'CEREJA IMP KG',
+  'DAMASCO GRANEL KG',
+  'FRUTA DO CONDE GNEL',
+  'GOIABA BRANCA GNEL',
+  'GOIABA VERMELHA GNEL',
+  'GRANADILLA IMPORTADA CD UN',
+  'GRAVIOLA GNEL KG',
+  'JAMELÃO',
+  'KIWI GOLD ZESPRI',
+  'KIWI IMP VERDE GNEL',
+  'MANGA BOURBON GNEL',
+  'MANGA ESPADA GNEL',
+  'MANGA HADEN GNEL',
+  'MANGA KEIT GNEL',
+  'MANGA PALMER NAC GNEL',
+  'MANGA ROSA GNEL',
+  'MANGA SHELLY',
+  'MANGA TOMMY GNEL',
+  'MANGOSTIN KG',
+  'NECTARINA IMP GNEL',
+  'NECTARINA NAC GNEL KG',
+  'NOZES C/CASCA GRANEL IMP',
+  'PÊSSEGO IMP GNEL',
+  'PÊSSEGO NAC GNEL',
+  'PITAYA AMARELA IMP',
+  'PITAYA BRANCA',
+  'PITAYA VERMELHA',
+  'ROMÃ IMP',
+  'UVA VITÓRIA GNEL KG',
+];
 
 const CategoryCard = ({
   category,
@@ -113,7 +153,7 @@ const CategoryCard = ({
               const plu = pluMatch ? pluMatch[1].trim() : '';
               return (
                 <div key={note.id} className="flex items-center justify-between gap-2 rounded-md border bg-muted/50 p-2">
-                  <div className="flex items-center gap-2 truncate">
+                  <div className="flex items-center gap-1 truncate">
                     <div className="flex items-center">
                         <span className="w-6 text-sm font-medium text-muted-foreground">{index + 1}.</span>
                         <Button variant="ghost" size="icon" className="h-7 w-7 flex-shrink-0" onClick={() => handleCopy(plu)}>
@@ -121,8 +161,8 @@ const CategoryCard = ({
                         </Button>
                     </div>
                     <div className="truncate">
-                        <span className="font-mono text-2xl font-bold">{plu}</span>
-                        <span className="font-medium text-sm uppercase text-muted-foreground"> - {note.title.toUpperCase()}</span>
+                      <span className="font-mono text-2xl font-bold">{plu}</span>
+                      <span className="font-medium text-sm uppercase text-muted-foreground"> - {note.title.toUpperCase()}</span>
                     </div>
                   </div>
                   <div className="flex items-center gap-1">
@@ -247,6 +287,13 @@ export default function FrutasPage() {
                     onEdit={handleEdit}
                     onDelete={deleteNote}
                 />
+                <CategoryCard
+                    category="FRUTAS ESPECIAIS"
+                    notes={filterNotesByTitle(frutasEspeciais)}
+                    isLoading={!isLoaded}
+                    onEdit={handleEdit}
+                    onDelete={deleteNote}
+                />
             </div>
 
         </div>
@@ -262,3 +309,5 @@ export default function FrutasPage() {
     </div>
   );
 }
+
+    

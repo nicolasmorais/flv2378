@@ -45,6 +45,46 @@ const initialData = [
   { title: 'PERA PACKANS IMP GNEL KG', content: 'PLU: 248006\nBarcode: ', category: 'Frutas', description: '', tags: [] },
   { title: 'PERA PORTUGUESA ROCHA GNEL', content: 'PLU: 248013\nBarcode: ', category: 'Frutas', description: '', tags: [] },
   { title: 'PERA WILLIANS IMP GNEL', content: 'PLU: 248037\nBarcode: ', category: 'Frutas', description: '', tags: [] },
+  
+  // Frutas Especiais
+  { title: 'AMEIXA IMPORTADA KG', content: 'PLU: 248242\nBarcode: ', category: 'Frutas', description: '', tags: [] },
+  { title: 'AMEIXA ROSADA', content: 'PLU: 248716\nBarcode: ', category: 'Frutas', description: '', tags: [] },
+  { title: 'ATEMOYA GNEL', content: 'PLU: 248969\nBarcode: ', category: 'Frutas', description: '', tags: [] },
+  { title: 'AVOCADO GNEL KG', content: 'PLU: 249645\nBarcode: ', category: 'Frutas', description: '', tags: [] },
+  { title: 'CACAU KG', content: 'PLU: 19910\nBarcode: ', category: 'Frutas', description: '', tags: [] },
+  { title: 'CAQUI CHOCOLATE GNEL', content: 'PLU: 250542\nBarcode: ', category: 'Frutas', description: '', tags: [] },
+  { title: 'CAQUI FUYU NACIONAL GNEL', content: 'PLU: 250757\nBarcode: ', category: 'Frutas', description: '', tags: [] },
+  { title: 'CAQUI IMPORTADO KG', content: 'PLU: 250696\nBarcode: ', category: 'Frutas', description: '', tags: [] },
+  { title: 'CAQUI RAMAFORTE GNEL', content: 'PLU: 252249\nBarcode: ', category: 'Frutas', description: '', tags: [] },
+  { title: 'CEREJA IMP KG', content: 'PLU: 250825\nBarcode: ', category: 'Frutas', description: '', tags: [] },
+  { title: 'DAMASCO GRANEL KG', content: 'PLU: 251051\nBarcode: ', category: 'Frutas', description: '', tags: [] },
+  { title: 'FRUTA DO CONDE GNEL', content: 'PLU: 251129\nBarcode: ', category: 'Frutas', description: '', tags: [] },
+  { title: 'GOIABA BRANCA GNEL', content: 'PLU: 251136\nBarcode: ', category: 'Frutas', description: '', tags: [] },
+  { title: 'GOIABA VERMELHA GNEL', content: 'PLU: 251143\nBarcode: ', category: 'Frutas', description: '', tags: [] },
+  { title: 'GRANADILLA IMPORTADA CD UN', content: 'PLU: 7551710\nBarcode: ', category: 'Frutas', description: '', tags: [] },
+  { title: 'GRAVIOLA GNEL KG', content: 'PLU: 258838\nBarcode: ', category: 'Frutas', description: '', tags: [] },
+  { title: 'JAMELÃO', content: 'PLU: 156066\nBarcode: ', category: 'Frutas', description: '', tags: [] },
+  { title: 'KIWI GOLD ZESPRI', content: 'PLU: 231404\nBarcode: ', category: 'Frutas', description: '', tags: [] },
+  { title: 'KIWI IMP VERDE GNEL', content: 'PLU: 251280\nBarcode: ', category: 'Frutas', description: '', tags: [] },
+  { title: 'MANGA BOURBON GNEL', content: 'PLU: 220217\nBarcode: ', category: 'Frutas', description: '', tags: [] },
+  { title: 'MANGA ESPADA GNEL', content: 'PLU: 221566\nBarcode: ', category: 'Frutas', description: '', tags: [] },
+  { title: 'MANGA HADEN GNEL', content: 'PLU: 224123\nBarcode: ', category: 'Frutas', description: '', tags: [] },
+  { title: 'MANGA KEIT GNEL', content: 'PLU: 225434\nBarcode: ', category: 'Frutas', description: '', tags: [] },
+  { title: 'MANGA PALMER NAC GNEL', content: 'PLU: 227841\nBarcode: ', category: 'Frutas', description: '', tags: [] },
+  { title: 'MANGA ROSA GNEL', content: 'PLU: 228312\nBarcode: ', category: 'Frutas', description: '', tags: [] },
+  { title: 'MANGA SHELLY', content: 'PLU: 753296\nBarcode: ', category: 'Frutas', description: '', tags: [] },
+  { title: 'MANGA TOMMY GNEL', content: 'PLU: 248228\nBarcode: ', category: 'Frutas', description: '', tags: [] },
+  { title: 'MANGOSTIN KG', content: 'PLU: 225076\nBarcode: ', category: 'Frutas', description: '', tags: [] },
+  { title: 'NECTARINA IMP GNEL', content: 'PLU: 260282\nBarcode: ', category: 'Frutas', description: '', tags: [] },
+  { title: 'NECTARINA NAC GNEL KG', content: 'PLU: 247825\nBarcode: ', category: 'Frutas', description: '', tags: [] },
+  { title: 'NOZES C/CASCA GRANEL IMP', content: 'PLU: 95426\nBarcode: ', category: 'Frutas', description: '', tags: [] },
+  { title: 'PÊSSEGO IMP GNEL', content: 'PLU: 248112\nBarcode: ', category: 'Frutas', description: '', tags: [] },
+  { title: 'PÊSSEGO NAC GNEL', content: 'PLU: 248150\nBarcode: ', category: 'Frutas', description: '', tags: [] },
+  { title: 'PITAYA AMARELA IMP', content: 'PLU: 7551727\nBarcode: ', category: 'Frutas', description: '', tags: [] },
+  { title: 'PITAYA BRANCA', content: 'PLU: 322980\nBarcode: ', category: 'Frutas', description: '', tags: [] },
+  { title: 'PITAYA VERMELHA', content: 'PLU: 3285688\nBarcode: ', category: 'Frutas', description: '', tags: [] },
+  { title: 'ROMÃ IMP', content: 'PLU: 259927\nBarcode: ', category: 'Frutas', description: '', tags: [] },
+  { title: 'UVA VITÓRIA GNEL KG', content: 'PLU: 260008\nBarcode: ', category: 'Frutas', description: '', tags: [] },
 
   // Legumes e Verduras
   { title: 'ABOBORA BATÃ', content: 'PLU: 337705\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
@@ -151,3 +191,5 @@ export async function setupDatabase() {
         // The app should still try to run.
     }
 }
+
+    
