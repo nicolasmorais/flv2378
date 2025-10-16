@@ -113,6 +113,37 @@ const frutasEspeciais = [
   'UVA VITÓRIA GNEL KG',
 ];
 
+const frutasTropicais = [
+    'ABACAXI GOLD',
+    'ABACAXI HAWAI',
+    'ABACAXI PÉROLA',
+    'CASTANHA PORTUGUESA GNEL',
+    'COCO SECO GNEL',
+    'COCO VERDE',
+    'COCO VERDE PARA GARRAFA UN',
+    'MELANCIA AMARELA KG',
+    'MELANCIA BABY',
+    'MELANCIA GRANEL KG',
+    'MELANCIA MAGALI KG',
+    'MELANCIA PINGO DOCE KG',
+    'MELANCIA SOLINDA (PERSONAL)',
+    'MELÃO AMARELO NAC GNEL',
+    'MELÃO AMARELO REI KG',
+    'MELÃO CANTALOUP NAC GNEL KG',
+    'MELÃO CHARANTEAIS GNEL',
+    'MELÃO DINO KG',
+    'MELÃO FORMOSA GNEL KG',
+    'MELÃO GALIA GNEL',
+    'MELÃO MELUNA KG',
+    'MELÃO ORANGE GNEL',
+    'MELÃO PELE DE SAPO REI GNEL',
+    'MELÃO VERDE GNEL',
+    'QA MELÃO AMARELO KG',
+    'TÂMARA A GRANEL KG',
+    'UVA CLARA S/SEMENTE CD KG',
+    'UVA VERMELHA S/SEMENTE KG',
+];
+
 const CategoryCard = ({
   category,
   notes,
@@ -294,6 +325,13 @@ export default function FrutasPage() {
                     onEdit={handleEdit}
                     onDelete={deleteNote}
                 />
+                <CategoryCard
+                    category="Frutas Tropicais"
+                    notes={filterNotesByTitle(frutasTropicais)}
+                    isLoading={!isLoaded}
+                    onEdit={handleEdit}
+                    onDelete={deleteNote}
+                />
             </div>
 
         </div>
@@ -309,3 +347,4 @@ export default function FrutasPage() {
     </div>
   );
 }
+
