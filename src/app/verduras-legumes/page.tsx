@@ -59,6 +59,40 @@ const aboboras = [
     'ABÓBORA SECA GNEL',
 ];
 
+const legumesETuberculos = [
+    'ABOBRINHA ITALIANA GNEL',
+    'ABOBRINHA BRASIL EXTRA GNEL',
+    'ALCACHOFRA UN',
+    'ALHO DENTE POTE',
+    'ALHO GRAÚDO GNEL',
+    'BATATA ASTERIX',
+    'BATATA COMUM GNEL',
+    'BATATA DOCE BRANCA GNEL',
+    'BATATA DOCE ROSADA GNEL',
+    'BETERRABA EXTRA GNEL',
+    'BERINJELA GNEL',
+    'CARÁ GNEL',
+    'CENOURA GNEL',
+    'CEBOLA BRANCA IMP KG',
+    'CEBOLA GRANEL',
+    'CEBOLA ROXA GNEL',
+    'CHUCHU EXTRA GNEL',
+    'GENGIBRE GNEL',
+    'INHAME GNEL',
+    'MANDIOCA GNEL',
+    'MANDIOQUINHA GNEL',
+    'PEPINO JAPONÊS EXTRA GNEL',
+    'PEPINO COMUM EXTRA GNEL',
+    'PEPINO CAIPIRA GRANEL',
+    'PIMENTÃO VERMELHO GNEL',
+    'PIMENTÃO VERDE EXTRA GNEL',
+    'PIMENTÃO AMARELO GNEL',
+    'PINHÃO KG',
+    'REPOLHO ROXO GNEL',
+    'REPOLHO VERDE GNEL',
+    'VAGEM MACARRÃO EXTRA GNEL',
+];
+
 
 const CategoryCard = ({
   category,
@@ -229,6 +263,13 @@ export default function VerdurasLegumesPage() {
               <CategoryCard
                   category="Abóboras"
                   notes={filterNotesByTitle(aboboras)}
+                  isLoading={!isLoaded}
+                  onEdit={handleEdit}
+                  onDelete={deleteNote}
+              />
+              <CategoryCard
+                  category="Legumes e Tubérculos"
+                  notes={filterNotesByTitle(legumesETuberculos)}
                   isLoading={!isLoaded}
                   onEdit={handleEdit}
                   onDelete={deleteNote}
