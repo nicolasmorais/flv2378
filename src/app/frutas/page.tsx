@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useMemo } from 'react';
@@ -25,19 +26,124 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+
+const frutasCitricas = ['LARANJA PERA', 'LARANJA PERA GNEL KG', 'LARANJA LIMA', 'LIMÃO TAHITI GNEL KG', 'MEXERICA PONKAN', 'MEXERICA RIO'];
+const frutasEspeciais = ['AMEIXA PRETA IMPORTADA', 'AMEIXA ROSADA NACIONAL', 'DAMASCO', 'FIGO', 'KIWI', 'KIWI IMPORTADO', 'NECTARINA IMPORTADA', 'PÊSSEGO IMP GNEL KG', 'PITAYA BRANCA GNEL', 'PITAYA AMARELA NAC GNEL', 'PITAYA VERMELHA GNEL', 'ROMÃ', 'UVA TOMPOSON (GLOBE VERDE)'];
+const macasEPearas = ['MAÇA FUJI NACIONAL', 'MAÇA GALA NACIONAL', 'MAÇA GRANNY SMITH', 'PERA ABATE', 'PERA ASIATICA', 'PERA PORT COMICE IMP GNEL KG', 'PERA PAKANS', 'PERA FORELLE IMPORTADA', 'PERA PORTUGUESA ROCHA', 'PERA RED ANJOU IMPORTADO', 'PERA WILLIANS'];
+const frutasTropicais = ['ABACATE', 'ABACAXI PEROLA UND', 'AVOCADO', 'BANANA OURO GNEL KG', 'BANANA MAÇA ORGÂNICA', 'BANANA NANICA ORGÂNICA', 'BANANA PRATA', 'BANANA TERRA', 'MAMÃO FORMOSA', 'MAMÃO PAPAYA GOLDEN GNEL KG', 'MANGA HADEN', 'MANGA PALMER GNEL KG', 'MARACUJÁ AZEDO', 'MELANCIA', 'MELÃO AMARELO', 'MELÃO CANTALOUPE NAC GNEL KG', 'MELÃO ORANGE', 'MELÃO GALEA'];
+
+
+const CategoryCard = ({
+  category,
+  notes,
+  isLoading,
+  onEdit,
+  onDelete,
+}: {
+  category: string;
+  notes: Note[];
+  isLoading: boolean;
+  onEdit: (note: Note) => void;
+  onDelete: (id: string) => void;
+}) => {
+  const [copiedPlu, setCopiedPlu] = useState<string | null>(null);
+
+  const handleCopy = (plu: string) => {
+    navigator.clipboard.writeText(plu);
+    setCopiedPlu(plu);
+    setTimeout(() => setCopiedPlu(null), 2000);
+  };
+
+  return (
+    <Card className="flex flex-col">
+      <CardHeader>
+        <CardTitle className="text-xl">{category}</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <ScrollArea className="h-96">
+          <div className="space-y-2 pr-4">
+            {isLoading && [...Array(5)].map((_, i) => (
+              <div key={i} className="flex items-center justify-between gap-2 rounded-md border bg-muted/50 p-2">
+                <Skeleton className="h-7 w-7" />
+                <Skeleton className="h-5 w-2/3" />
+              </div>
+            ))}
+            {!isLoading && notes.map(note => {
+              const pluMatch = note.content.match(/PLU: (.*)/);
+              const plu = pluMatch ? pluMatch[1].trim() : '';
+              return (
+                <div key={note.id} className="flex items-center justify-between gap-2 rounded-md border bg-muted/50 p-2">
+                  <div className="flex items-center gap-2 truncate">
+                    <Button variant="ghost" size="icon" className="h-7 w-7 flex-shrink-0" onClick={() => handleCopy(plu)}>
+                      {copiedPlu === plu ? <Check className="h-4 w-4 text-green-500" /> : <Copy className="h-4 w-4" />}
+                    </Button>
+                    <p className="font-medium text-sm truncate">
+                      {note.title} - <span className="font-mono">{plu}</span>
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="icon" className="h-7 w-7 flex-shrink-0">
+                          <MoreVertical className="h-4 w-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem onClick={() => onEdit(note)}>
+                          <Edit className="mr-2 h-4 w-4" />
+                          <span>Editar</span>
+                        </DropdownMenuItem>
+                        <AlertDialog>
+                          <AlertDialogTrigger asChild>
+                            <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                              <Trash2 className="mr-2 h-4 w-4 text-destructive" />
+                              <span className="text-destructive">Deletar</span>
+                            </DropdownMenuItem>
+                          </AlertDialogTrigger>
+                          <AlertDialogContent>
+                            <AlertDialogHeader>
+                              <AlertDialogTitle>Você tem certeza?</AlertDialogTitle>
+                              <AlertDialogDescription>
+                                Essa ação não pode ser desfeita. Isso irá deletar o item permanentemente.
+                              </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                              <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                              <AlertDialogAction onClick={() => onDelete(note.id)} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+                                Deletar
+                              </AlertDialogAction>
+                            </AlertDialogFooter>
+                          </AlertDialogContent>
+                        </AlertDialog>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
+                </div>
+              )
+            })}
+            {!isLoading && notes.length === 0 && (
+              <p className="text-sm text-muted-foreground text-center py-4">Nenhum item.</p>
+            )}
+          </div>
+        </ScrollArea>
+      </CardContent>
+    </Card>
+  )
+};
+
 
 export default function FrutasPage() {
   const { notes, addNote, updateNote, deleteNote, isLoaded } = useNotesStore();
   const [isNoteFormOpen, setNoteFormOpen] = useState(false);
   const [editingNote, setEditingNote] = useState<Note | undefined>(undefined);
-  const [copiedPlu, setCopiedPlu] = useState<string | null>(null);
 
-  const filteredNotes = useMemo(() => {
+  const filterNotesByTitle = (titles: string[]) => {
     return notes
-      .filter(note => note.category === 'Frutas')
+      .filter(note => titles.includes(note.title))
       .sort((a, b) => a.title.localeCompare(b.title));
-  }, [notes]);
-
+  };
+  
   const handleEdit = (note: Note) => {
     setEditingNote(note);
     setNoteFormOpen(true);
@@ -70,11 +176,6 @@ export default function FrutasPage() {
     handleNoteFormClose();
   };
 
-  const handleCopy = (plu: string) => {
-    navigator.clipboard.writeText(plu);
-    setCopiedPlu(plu);
-    setTimeout(() => setCopiedPlu(null), 2000);
-  };
 
   return (
     <div className="flex flex-col h-screen">
@@ -88,84 +189,37 @@ export default function FrutasPage() {
             </Button>
           </div>
 
-          <ScrollArea className="flex-1 -mx-4 rounded-lg border">
-             <div className="p-4 space-y-2">
-              {!isLoaded && [...Array(15)].map((_, i) => (
-                <div key={i} className="flex items-center justify-between gap-2 rounded-md border bg-muted/50 p-2">
-                  <Skeleton className="h-7 w-7" />
-                  <Skeleton className="h-5 w-2/3" />
-                  <Skeleton className="h-7 w-7" />
-                </div>
-              ))}
-              {isLoaded && filteredNotes.length > 0 && (
-                <>
-                  {filteredNotes.map(note => {
-                     const pluMatch = note.content.match(/PLU: (.*)/);
-                     const plu = pluMatch ? pluMatch[1].trim() : '';
-                     return (
-                      <div key={note.id} className="flex items-center justify-between gap-2 rounded-md border bg-muted/50 p-2">
-                        <div className="flex items-center gap-2 truncate">
-                          <Button variant="ghost" size="icon" className="h-7 w-7 flex-shrink-0" onClick={() => handleCopy(plu)}>
-                            {copiedPlu === plu ? <Check className="h-4 w-4 text-green-500" /> : <Copy className="h-4 w-4" />}
-                          </Button>
-                          <p className="font-medium text-sm truncate">
-                            {note.title} - <span className="font-mono">{plu}</span>
-                          </p>
-                        </div>
-                        <div className="flex items-center gap-1">
-                          <DropdownMenu>
-                              <DropdownMenuTrigger asChild>
-                                  <Button variant="ghost" size="icon" className="h-7 w-7 flex-shrink-0">
-                                      <MoreVertical className="h-4 w-4" />
-                                  </Button>
-                              </DropdownMenuTrigger>
-                              <DropdownMenuContent align="end">
-                                  <DropdownMenuItem onClick={() => handleEdit(note)}>
-                                      <Edit className="mr-2 h-4 w-4" />
-                                      <span>Editar</span>
-                                  </DropdownMenuItem>
-                                  <AlertDialog>
-                                      <AlertDialogTrigger asChild>
-                                          <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-                                              <Trash2 className="mr-2 h-4 w-4 text-destructive" />
-                                              <span className="text-destructive">Deletar</span>
-                                          </DropdownMenuItem>
-                                      </AlertDialogTrigger>
-                                      <AlertDialogContent>
-                                          <AlertDialogHeader>
-                                              <AlertDialogTitle>Você tem certeza?</AlertDialogTitle>
-                                              <AlertDialogDescription>
-                                                  Essa ação não pode ser desfeita. Isso irá deletar o item permanentemente.
-                                              </AlertDialogDescription>
-                                          </AlertDialogHeader>
-                                          <AlertDialogFooter>
-                                              <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                                              <AlertDialogAction onClick={() => deleteNote(note.id)} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
-                                                  Deletar
-                                              </AlertDialogAction>
-                                          </AlertDialogFooter>
-                                      </AlertDialogContent>
-                                  </AlertDialog>
-                              </DropdownMenuContent>
-                          </DropdownMenu>
-                        </div>
-                      </div>
-                     )
-                  })}
-                </>
-              )}
-              {isLoaded && filteredNotes.length === 0 && (
-                <div className="text-center py-20">
-                  <h3 className="text-xl font-semibold text-muted-foreground">
-                    Nenhum item cadastrado
-                  </h3>
-                  <p className="text-muted-foreground mt-2">
-                    Clique em "Novo Cadastro" para começar.
-                  </p>
-                </div>
-              )}
-             </div>
-          </ScrollArea>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <CategoryCard
+                    category="Frutas Cítricas"
+                    notes={filterNotesByTitle(frutasCitricas)}
+                    isLoading={!isLoaded}
+                    onEdit={handleEdit}
+                    onDelete={deleteNote}
+                />
+                <CategoryCard
+                    category="Frutas Especiais"
+                    notes={filterNotesByTitle(frutasEspeciais)}
+                    isLoading={!isLoaded}
+                    onEdit={handleEdit}
+                    onDelete={deleteNote}
+                />
+                <CategoryCard
+                    category="Maçãs e Pêras"
+                    notes={filterNotesByTitle(macasEPearas)}
+                    isLoading={!isLoaded}
+                    onEdit={handleEdit}
+                    onDelete={deleteNote}
+                />
+                <CategoryCard
+                    category="Frutas Tropicais"
+                    notes={filterNotesByTitle(frutasTropicais)}
+                    isLoading={!isLoaded}
+                    onEdit={handleEdit}
+                    onDelete={deleteNote}
+                />
+            </div>
+
         </div>
       </main>
 
