@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect, useMemo, useCallback } from 'react';
@@ -54,7 +55,7 @@ export default function BalancoPage() {
                 return { ...note, plu };
             })
             .filter(note => note.plu)
-            .sort((a, b) => a.plu.localeCompare(b.plu, undefined, { numeric: true }));
+            .sort((a, b) => a.title.localeCompare(b.title));
     }, [notes]);
     
     const filteredProducts = useMemo(() => {
