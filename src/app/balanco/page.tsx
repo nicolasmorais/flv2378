@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useEffect, useMemo, useCallback } from 'react';
@@ -10,7 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Copy, Check } from 'lucide-react';
+import { Copy, Check, Search } from 'lucide-react';
 import { debounce } from 'lodash';
 
 const getTodayDateString = () => {
@@ -27,6 +26,7 @@ export default function BalancoPage() {
     const [isLoaded, setIsLoaded] = useState(false);
     const [summaryText, setSummaryText] = useState('');
     const [isCopied, setIsCopied] = useState(false);
+    const [searchTerm, setSearchTerm] = useState('');
     const { toast } = useToast();
 
     const today = getTodayDateString();
@@ -56,6 +56,16 @@ export default function BalancoPage() {
             .filter(note => note.plu)
             .sort((a, b) => a.plu.localeCompare(b.plu, undefined, { numeric: true }));
     }, [notes]);
+    
+    const filteredProducts = useMemo(() => {
+        if (!searchTerm) {
+            return products;
+        }
+        return products.filter(p => 
+            p.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
+            p.plu.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+    }, [products, searchTerm]);
     
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const debouncedSave = useCallback(
@@ -97,8 +107,18 @@ export default function BalancoPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div>
                     <h2 className="text-lg font-semibold mb-4">Lançamento de Estoque (kg)</h2>
+                    <div className="mb-4 relative">
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                        <Input
+                            type="text"
+                            placeholder="Buscar por PLU ou nome do produto..."
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            className="w-full pl-10"
+                        />
+                    </div>
                     <div className="border rounded-lg overflow-hidden">
-                        <div className="h-[60vh] overflow-y-auto">
+                        <div className="h-[calc(60vh_-_48px)] overflow-y-auto">
                             <table className="w-full text-sm text-left">
                                 <thead className="bg-muted text-muted-foreground sticky top-0">
                                     <tr>
@@ -115,7 +135,7 @@ export default function BalancoPage() {
                                             <td className="p-2"><Skeleton className="h-8 w-full" /></td>
                                         </tr>
                                     ))}
-                                    {isLoaded && products.map((product, index) => (
+                                    {isLoaded && filteredProducts.map((product, index) => (
                                         <tr key={product.id} className={`border-t ${index % 2 === 0 ? 'bg-white' : 'bg-muted/50'}`}>
                                             <td className="p-3 font-mono">{product.plu}</td>
                                             <td className="p-3 font-medium">{product.title}</td>
@@ -132,8 +152,10 @@ export default function BalancoPage() {
                                     ))}
                                 </tbody>
                             </table>
-                             {isLoaded && products.length === 0 && (
-                                <div className="p-4 text-center text-muted-foreground">Nenhum produto cadastrado.</div>
+                             {isLoaded && filteredProducts.length === 0 && (
+                                <div className="p-4 text-center text-muted-foreground">
+                                    {searchTerm ? "Nenhum produto encontrado." : "Nenhum produto cadastrado."}
+                                </div>
                             )}
                         </div>
                     </div>
