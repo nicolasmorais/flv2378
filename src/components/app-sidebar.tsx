@@ -4,7 +4,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { Home, Leaf, Apple, Carrot, CalendarDays, LogOut, Package, Scissors, Notebook, KeyRound } from 'lucide-react';
+import { Home, Leaf, Apple, Carrot, CalendarDays, LogOut, Package, Scissors, Notebook, KeyRound, Scale } from 'lucide-react';
 import {
   SidebarHeader,
   SidebarContent,
@@ -25,6 +25,7 @@ const menuItems = [
     { href: '/plus-pacotes', label: 'Plus/Pacotes', icon: Package },
     { href: '/plus-cortes', label: 'Plus/Cortes', icon: Scissors },
     { href: '/preco-livre-diario', label: 'Preço Livre Diário', icon: CalendarDays },
+    { href: '/balanco', label: 'Balanço FLV', icon: Scale },
     { href: '/anotacoes', label: 'Anotações', icon: Notebook },
     { href: '/acessos', label: 'Acessos', icon: KeyRound },
 ];

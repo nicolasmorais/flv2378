@@ -245,6 +245,19 @@ export async function setupDatabase() {
         `;
         console.log("Table 'notes' is ready.");
 
+        // Create balances table if it doesn't exist
+        await sql`
+            CREATE TABLE IF NOT EXISTS balances (
+                id SERIAL PRIMARY KEY,
+                plu TEXT NOT NULL,
+                kg NUMERIC NOT NULL,
+                date DATE NOT NULL,
+                "updatedAt" TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+                UNIQUE(plu, date)
+            );
+        `;
+        console.log("Table 'balances' is ready.");
+
         // Check if there is any data in notes
         const { rowCount: notesRowCount } = await sql`SELECT * from notes`;
 

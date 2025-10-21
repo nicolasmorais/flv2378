@@ -8,7 +8,7 @@ import {
 } from '@/ai/flows/generate-strong-password';
 import { sql } from '@vercel/postgres';
 import { revalidatePath } from 'next/cache';
-import type { Note } from '@/lib/types';
+import type { Note, Balance } from '@/lib/types';
 import { setupDatabase } from '@/lib/db';
 
 export async function generatePasswordAction(input: GenerateStrongPasswordInput): Promise<GenerateStrongPasswordOutput> {
@@ -51,6 +51,7 @@ export async function addNoteAction(note: Omit<Note, 'id' | 'createdAt' >) {
     revalidatePath('/preco-livre-diario');
     revalidatePath('/anotacoes');
     revalidatePath('/acessos');
+    revalidatePath('/balanco');
   } catch (error) {
     console.error('Failed to add note:', error);
     throw new Error('Failed to add note.');
@@ -73,6 +74,7 @@ export async function updateNoteAction(id: string, note: Partial<Omit<Note, 'id'
         revalidatePath('/preco-livre-diario');
         revalidatePath('/anotacoes');
         revalidatePath('/acessos');
+        revalidatePath('/balanco');
     } catch (error) {
         console.error('Failed to update note:', error);
         throw new Error('Failed to update note.');
@@ -94,6 +96,7 @@ export async function deleteNoteAction(id: string) {
         revalidatePath('/preco-livre-diario');
         revalidatePath('/anotacoes');
         revalidatePath('/acessos');
+        revalidatePath('/balanco');
     } catch (error) {
         console.error('Failed to delete note:', error);
         throw new Error('Failed to delete note.');
@@ -102,9 +105,10 @@ export async function deleteNoteAction(id: string) {
 
 export async function clearAndReseedDatabase() {
   try {
-    console.log("Dropping table 'notes'...");
+    console.log("Dropping tables 'notes' and 'balances'...");
     await sql`DROP TABLE IF EXISTS notes`;
-    console.log("Table 'notes' dropped.");
+    await sql`DROP TABLE IF EXISTS balances`;
+    console.log("Tables dropped.");
     
     await setupDatabase();
 
@@ -117,10 +121,45 @@ export async function clearAndReseedDatabase() {
     revalidatePath('/preco-livre-diario');
     revalidatePath('/anotacoes');
     revalidatePath('/acessos');
+    revalidatePath('/balanco');
     
     return { success: true };
   } catch (error) {
     console.error('Failed to clear and re-seed database:', error);
     return { success: false, error: 'Failed to clear and re-seed database.' };
   }
+}
+
+// Balance actions
+export async function fetchBalancesByDate(date: string): Promise<Balance[]> {
+    try {
+        const { rows } = await sql<Balance>`SELECT * FROM balances WHERE date = ${date}`;
+        return rows;
+    } catch (error) {
+        console.error('Failed to fetch balances:', error);
+        if ((error as any).code === '42P01') {
+            console.log("Table 'balances' not found. Returning empty array.");
+            return [];
+        }
+        throw new Error('Failed to fetch balances.');
+    }
+}
+
+export async function upsertBalanceAction(plu: string, kg: number, date: string) {
+    try {
+        if (kg === null || isNaN(kg)) {
+           await sql`DELETE FROM balances WHERE plu = ${plu} AND date = ${date}`;
+        } else {
+            await sql`
+                INSERT INTO balances (plu, kg, date, "updatedAt")
+                VALUES (${plu}, ${kg}, ${date}, CURRENT_TIMESTAMP)
+                ON CONFLICT (plu, date)
+                DO UPDATE SET kg = EXCLUDED.kg, "updatedAt" = CURRENT_TIMESTAMP;
+            `;
+        }
+        revalidatePath('/balanco');
+    } catch (error) {
+        console.error('Failed to upsert balance:', error);
+        throw new Error('Failed to upsert balance.');
+    }
 }
