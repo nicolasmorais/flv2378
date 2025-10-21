@@ -8,7 +8,7 @@ import {
 } from '@/ai/flows/generate-strong-password';
 import { sql } from '@vercel/postgres';
 import { revalidatePath } from 'next/cache';
-import type { Note } from '@/lib/types';
+import type { Note, Balance } from '@/lib/types';
 import { setupDatabase } from '@/lib/db';
 
 export async function generatePasswordAction(input: GenerateStrongPasswordInput): Promise<GenerateStrongPasswordOutput> {
@@ -123,4 +123,34 @@ export async function clearAndReseedDatabase() {
     console.error('Failed to clear and re-seed database:', error);
     return { success: false, error: 'Failed to clear and re-seed database.' };
   }
+}
+
+// Balance actions
+export async function fetchBalancesByDate(date: string): Promise<Balance[]> {
+    try {
+        const { rows } = await sql<Balance>`SELECT * FROM balances WHERE date = ${date}`;
+        return rows;
+    } catch (error) {
+        console.error('Failed to fetch balances:', error);
+        if ((error as any).code === '42P01') { // table does not exist
+            console.log('Table balances not found, returning empty');
+            return [];
+        }
+        throw new Error('Failed to fetch balances.');
+    }
+}
+
+export async function upsertBalanceAction(plu: string, kg: number | null, date: string) {
+    try {
+        await sql`
+            INSERT INTO balances (plu, kg, date) 
+            VALUES (${plu}, ${kg}, ${date})
+            ON CONFLICT (plu, date) 
+            DO UPDATE SET kg = EXCLUDED.kg, "updatedAt" = NOW()`;
+        
+        revalidatePath('/balanco');
+    } catch (error) {
+        console.error('Failed to upsert balance:', error);
+        throw new Error('Failed to upsert balance.');
+    }
 }
