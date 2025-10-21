@@ -64,7 +64,18 @@ const frutasTropicais = [
   'MELÃO AMARELO REI KG', 'MELÃO CANTALOUP NAC GNEL KG', 'MELÃO CHARANTEAIS GNEL', 'MELÃO DINO KG', 
   'MELÃO FORMOSA GNEL KG', 'MELÃO GALIA GNEL', 'MELÃO MELUNA KG', 'MELÃO ORANGE GNEL', 
   'MELÃO PELE DE SAPO REI GNEL', 'MELÃO VERDE GNEL', 'QA MELÃO AMARELO KG', 'TÂMARA A GRANEL KG', 
-  'UVA CLARA S/SEMENTE CD KG', 'UVA VERMELHA S/SEMENTE KG'
+  'UVA CLARA S/SEMENTE CD KG', 'UVA VERMELHA S/SEMENTE KG',
+  'MAMAO PAPAYA SUNRISE 1,2KG',
+  'ABACATE GNEL',
+  'BANANA MAÇA GNEL',
+  'BANANA NANICA GNEL',
+  'BANANA OURO GNEL KG',
+  'BANANA PRATA GNEL',
+  'BANANA TERRA GNEL',
+  'MAMAO FORMOSA GNEL',
+  'MAMAO PAPAYA GOLDEN GNEL',
+  'MAMAO PAPAYA SUNRISE 1,8KG',
+  'QA MAMAO PAPAYA GOLDEN 1.5 QUALITÁ',
 ];
 
 const tomates = [
@@ -140,7 +151,7 @@ const CategoryCard = ({
                const plu = pluMatch ? pluMatch[1].trim() : '';
                return (
                 <div key={note.id} className="flex items-center justify-between gap-2 rounded-md border bg-muted/50 p-2">
-                  <div className="flex items-center gap-2 truncate">
+                  <div className="flex items-center gap-1 truncate">
                     <div className="flex items-center">
                         <span className="w-6 text-sm font-medium text-muted-foreground">{index + 1}.</span>
                         <Button variant="ghost" size="icon" className="h-7 w-7 flex-shrink-0" onClick={() => handleCopy(plu)}>

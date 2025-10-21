@@ -115,6 +115,17 @@ const initialData = [
   { title: 'TÂMARA A GRANEL KG', content: 'PLU: 123266\nBarcode: ', category: 'Frutas', description: '', tags: [] },
   { title: 'UVA CLARA S/SEMENTE CD KG', content: 'PLU: 260176\nBarcode: ', category: 'Frutas', description: '', tags: [] },
   { title: 'UVA VERMELHA S/SEMENTE KG', content: 'PLU: 260077\nBarcode: ', category: 'Frutas', description: '', tags: [] },
+  { title: 'MAMAO PAPAYA SUNRISE 1,2KG', content: 'PLU: 4210610\nBarcode: ', category: 'Frutas', description: '', tags: [] },
+  { title: 'ABACATE GNEL', content: 'PLU: 247023\nBarcode: ', category: 'Frutas', description: '', tags: [] },
+  { title: 'BANANA MAÇA GNEL', content: 'PLU: 250177\nBarcode: ', category: 'Frutas', description: '', tags: [] },
+  { title: 'BANANA NANICA GNEL', content: 'PLU: 250399\nBarcode: ', category: 'Frutas', description: '', tags: [] },
+  { title: 'BANANA OURO GNEL KG', content: 'PLU: 250436\nBarcode: ', category: 'Frutas', description: '', tags: [] },
+  { title: 'BANANA PRATA GNEL', content: 'PLU: 250474\nBarcode: ', category: 'Frutas', description: '', tags: [] },
+  { title: 'BANANA TERRA GNEL', content: 'PLU: 258548\nBarcode: ', category: 'Frutas', description: '', tags: [] },
+  { title: 'MAMAO FORMOSA GNEL', content: 'PLU: 219631\nBarcode: ', category: 'Frutas', description: '', tags: [] },
+  { title: 'MAMAO PAPAYA GOLDEN GNEL', content: 'PLU: 259163\nBarcode: ', category: 'Frutas', description: '', tags: [] },
+  { title: 'MAMAO PAPAYA SUNRISE 1,8KG', content: 'PLU: 4424444\nBarcode: ', category: 'Frutas', description: '', tags: [] },
+  { title: 'QA MAMAO PAPAYA GOLDEN 1.5 QUALITÁ', content: 'PLU: 1094817\nBarcode: ', category: 'Frutas', description: '', tags: [] },
 
   // Legumes e Verduras - Tomates
   { title: 'QA TOMATE CARM 600G', content: 'PLU: 1091922\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
@@ -177,6 +188,8 @@ const initialData = [
   { title: 'REPOLHO ROXO GNEL', content: 'PLU: 339193\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
   { title: 'REPOLHO VERDE GNEL', content: 'PLU: 339131\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
   { title: 'VAGEM MACARRÃO EXTRA GNEL', content: 'PLU: 337748\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
+
+  // Legumes e Verduras - Cogumelos
   { title: 'COGUMELO PARIS KG', content: 'PLU: 297554\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
   { title: 'COGUMELO SHITAKE KG', content: 'PLU: 269247\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
   { title: 'COGUMELO SHIMEJI BRANCO KG', content: 'PLU: 269100\nBarcode: ', category: 'Legumes e Verduras', description: '', tags: [] },
