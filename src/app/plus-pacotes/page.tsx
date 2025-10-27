@@ -113,8 +113,7 @@ export default function PlusPacotesPage() {
                                 </Button>
                             </div>
                           <div className="truncate">
-                            <span className="font-mono text-2xl font-bold">{plu}</span>
-                            <span className="font-medium text-sm uppercase text-muted-foreground"> - {note.title.toUpperCase()}</span>
+                            <span className="font-medium text-sm">{plu} - {note.title.toUpperCase()}</span>
                           </div>
                         </div>
                         <div className="flex items-center gap-1">

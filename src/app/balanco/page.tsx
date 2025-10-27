@@ -138,7 +138,7 @@ export default function BalancoPage() {
                                     ))}
                                     {isLoaded && filteredProducts.map((product, index) => (
                                         <tr key={product.id} className={`border-t ${index % 2 === 0 ? 'bg-white' : 'bg-muted/50'}`}>
-                                            <td className="p-3 font-mono">{product.plu}</td>
+                                            <td className="p-3 font-medium">{product.plu}</td>
                                             <td className="p-3 font-medium">{product.title}</td>
                                             <td className="p-2">
                                                 <Input

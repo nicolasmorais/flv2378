@@ -159,8 +159,7 @@ const CategoryCard = ({
                         </Button>
                     </div>
                     <div className="truncate">
-                      <span className="font-mono text-sm font-bold">{plu}</span>
-                      <span className="font-medium text-sm uppercase text-muted-foreground"> - {note.title.toUpperCase()}</span>
+                      <span className="font-medium text-sm">{plu} - {note.title.toUpperCase()}</span>
                     </div>
                   </div>
                   <div className="flex items-center gap-1">
@@ -360,7 +359,7 @@ export default function DashboardPage() {
               onDelete={deleteNote}
               mainCategory="Legumes e Verduras"
             />
-            <CategoryCard d
+            <CategoryCard 
               category="Legumes e Tubérculos"
               notes={filterNotesByTitle('Legumes e Verduras', legumesETuberculos)}
               isLoading={!isLoaded}
