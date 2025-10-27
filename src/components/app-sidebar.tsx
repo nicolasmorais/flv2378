@@ -4,7 +4,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { Home, Leaf, Apple, Carrot, CalendarDays, LogOut, Package, Scissors, Notebook, KeyRound, Scale } from 'lucide-react';
+import { Home, Leaf, Apple, Carrot, CalendarDays, LogOut, Package, Scissors, Notebook, KeyRound, Scale, LayoutDashboard, List } from 'lucide-react';
 import {
   SidebarHeader,
   SidebarContent,
@@ -18,7 +18,8 @@ import {
 import { useAuthStore } from '@/hooks/use-auth-store';
 
 const menuItems = [
-    { href: '/', label: 'Todos os Plus', icon: Home },
+    { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+    { href: '/todos-os-plus', label: 'Todos os Plus', icon: List },
     { href: '/folhagem', label: 'Plus Folhagem', icon: Leaf },
     { href: '/frutas', label: 'Plus Frutas', icon: Apple },
     { href: '/verduras-legumes', label: 'Plus Verduras e Legumes', icon: Carrot },
