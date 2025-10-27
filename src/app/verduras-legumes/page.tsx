@@ -149,7 +149,7 @@ const CategoryCard = ({
                         </Button>
                     </div>
                     <div className="truncate">
-                      <span className="font-mono text-2xl font-bold">{plu}</span>
+                      <span className="font-mono text-sm font-bold">{plu}</span>
                       <span className="font-medium text-sm uppercase text-muted-foreground"> - {note.title.toUpperCase()}</span>
                     </div>
                   </div>

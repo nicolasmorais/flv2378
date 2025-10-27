@@ -78,7 +78,7 @@ export default function TodosOsPlusPage() {
                                         <span className="w-8 text-sm font-medium text-muted-foreground">#{index + 1}</span>
                                     </div>
                                   <div className="truncate">
-                                    <span className="font-mono text-xl font-bold">{plu}</span>
+                                    <span className="font-mono text-sm font-bold">{plu}</span>
                                     <span className="font-medium text-sm uppercase text-muted-foreground"> - {product.title.toUpperCase()}</span>
                                   </div>
                                 </div>
