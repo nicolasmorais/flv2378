@@ -112,7 +112,7 @@ export default function TodosOsPlusPage() {
         <>
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 h-[calc(100vh_-_var(--header-height,0px))] flex flex-col">
                 <div className="flex items-center justify-between mb-4">
-                    <h1 className="text-2xl font-bold">Todos os Plus</h1>
+                    <h1 className="text-2xl font-bold">Controle de Plus</h1>
                     <Button onClick={handleAddNew}>
                         <PlusCircle className="mr-2 h-4 w-4" />
                         Novo Cadastro

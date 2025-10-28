@@ -19,7 +19,7 @@ import { useAuthStore } from '@/hooks/use-auth-store';
 
 const menuItems = [
     { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-    { href: '/todos-os-plus', label: 'Todos os Plus', icon: List },
+    { href: '/todos-os-plus', label: 'Controle de Plus', icon: List },
     { href: '/folhagem', label: 'Plus Folhagem', icon: Leaf },
     { href: '/frutas', label: 'Plus Frutas', icon: Apple },
     { href: '/verduras-legumes', label: 'Plus Verduras e Legumes', icon: Carrot },
