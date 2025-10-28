@@ -13,6 +13,8 @@ import {
   DialogDescription,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
+import { useIsMobile } from '@/hooks/use-mobile';
+import { cn } from '@/lib/utils';
 
 interface BarcodeGeneratorDialogProps {
   isOpen: boolean;
@@ -20,7 +22,7 @@ interface BarcodeGeneratorDialogProps {
   product: ({ plu: string } & Note) | null;
 }
 
-const Barcode = ({ value }: { value: string }) => {
+const Barcode = ({ value, isMobile }: { value: string, isMobile: boolean }) => {
   const svgRef = useRef<SVGSVGElement | null>(null);
 
   useEffect(() => {
@@ -29,27 +31,27 @@ const Barcode = ({ value }: { value: string }) => {
         JsBarcode(svgRef.current, value, {
           format: "CODE128",
           lineColor: "#000",
-          width: 2,
-          height: 100,
+          width: isMobile ? 3 : 2,
+          height: isMobile ? 120 : 100,
           displayValue: true,
           fontOptions: "bold",
-          fontSize: 18,
+          fontSize: isMobile ? 24 : 18,
         });
       } catch (e) {
         console.error("Error generating barcode:", e);
-        // Fallback or error display could be implemented here
         if (svgRef.current) {
           svgRef.current.innerHTML = '';
         }
       }
     }
-  }, [value]);
+  }, [value, isMobile]);
 
   return <svg ref={svgRef} />;
 };
 
 
 export default function BarcodeGeneratorDialog({ isOpen, onOpenChange, product }: BarcodeGeneratorDialogProps) {
+  const isMobile = useIsMobile();
   
   if (!product) {
     return null;
@@ -61,7 +63,7 @@ export default function BarcodeGeneratorDialog({ isOpen, onOpenChange, product }
         const printWindow = window.open('', '', 'height=400,width=800');
         if (printWindow) {
             printWindow.document.write('<html><head><title>Imprimir Código de Barras</title>');
-            printWindow.document.write('<style>@media print { body { margin: 0; } @page { size: auto; margin: 10mm; } }</style>');
+            printWindow.document.write('<style>@media print { body { margin: 0; display: flex; justify-content: center; align-items: center; height: 100%; } @page { size: auto; margin: 10mm; } svg { width: 90%; height: auto; } }</style>');
             printWindow.document.write('</head><body>');
             printWindow.document.write(svgElement.innerHTML);
             printWindow.document.write('</body></html>');
@@ -75,15 +77,15 @@ export default function BarcodeGeneratorDialog({ isOpen, onOpenChange, product }
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className={cn("sm:max-w-md", isMobile && "w-[90vw] max-w-[90vw]")}>
         <DialogHeader>
           <DialogTitle>{product.title}</DialogTitle>
           <DialogDescription>
             Código de Barras para o PLU: {product.plu}
           </DialogDescription>
         </DialogHeader>
-        <div id="barcode-svg-container" className="flex justify-center items-center py-4">
-          <Barcode value={product.plu} />
+        <div id="barcode-svg-container" className="flex justify-center items-center py-4 overflow-x-auto">
+          <Barcode value={product.plu} isMobile={isMobile} />
         </div>
         <DialogFooter>
           <Button type="button" variant="ghost" onClick={() => onOpenChange(false)}>Fechar</Button>
