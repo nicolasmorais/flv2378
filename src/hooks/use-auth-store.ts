@@ -1,59 +1,36 @@
 
-'use client';
-
 import { create } from 'zustand';
-import { persist, createJSONStorage } from 'zustand/middleware';
-import { useState, useEffect } from 'react';
 
 interface AuthState {
   isAuthenticated: boolean;
-  login: () => void;
+  isAuthLoaded: boolean;
+  login: (password: string) => boolean;
   logout: () => void;
 }
 
-const useAuthStoreInternal = create<AuthState>()(
-  persist(
-    (set) => ({
-      isAuthenticated: false,
-      login: () => set({ isAuthenticated: true }),
-      logout: () => {
-        // also clear session storage on logout
-        sessionStorage.removeItem('auth-storage');
-        set({ isAuthenticated: false });
-      },
-    }),
-    {
-      name: 'auth-storage', 
-      storage: createJSONStorage(() => sessionStorage), 
+export const useAuthStore = create<AuthState>((set) => ({
+  isAuthenticated: false,
+  isAuthLoaded: false,
+  login: (password) => {
+    const correctPassword = process.env.NEXT_PUBLIC_APP_PASSWORD || 'admin';
+    if (password === correctPassword) {
+      set({ isAuthenticated: true });
+      return true;
     }
-  )
-);
+    return false;
+  },
+  logout: () => set({ isAuthenticated: false }),
+}));
 
-interface AuthStore extends AuthState {
-    isAuthLoaded: boolean;
-}
+export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+    const store = useAuthStore();
+    useEffect(() => {
+        // Simulate checking for a token or session
+        // In a real app, this would be an API call
+        setTimeout(() => {
+            useAuthStore.setState({ isAuthLoaded: true });
+        }, 1000);
+    }, []);
 
-// Custom hook to safely access the persisted state on the client
-export const useAuthStore = (): AuthStore => {
-  const [hydratedState, setHydratedState] = useState<AuthState & { isAuthLoaded: boolean }>({
-    isAuthenticated: false,
-    login: () => {},
-    logout: () => {},
-    isAuthLoaded: false,
-  });
-
-  useEffect(() => {
-    // This runs only on the client, after hydration
-    const unsub = useAuthStoreInternal.subscribe(state => {
-      setHydratedState({ ...state, isAuthLoaded: true });
-    });
-
-    // Set initial state
-    const currentState = useAuthStoreInternal.getState();
-    setHydratedState({ ...currentState, isAuthLoaded: true });
-
-    return () => unsub();
-  }, []);
-
-  return hydratedState;
+    return <>{children}</>;
 };
