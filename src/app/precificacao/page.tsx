@@ -12,6 +12,7 @@ import { Search, Barcode } from 'lucide-react';
 import { debounce } from 'lodash';
 import BarcodeGeneratorDialog from '@/components/barcode-generator-dialog';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { useToast } from '@/hooks/use-toast';
 
 export default function PrecificacaoPage() {
     const { notes, isLoaded: notesLoaded } = useNotesStore();
@@ -19,6 +20,7 @@ export default function PrecificacaoPage() {
     const [isLoaded, setIsLoaded] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedProduct, setSelectedProduct] = useState<({plu: string} & Note) | null>(null);
+    const { toast } = useToast();
 
     useEffect(() => {
         const loadData = async () => {
@@ -60,12 +62,16 @@ export default function PrecificacaoPage() {
     const debouncedSave = useCallback(
         debounce((plu: string, price: number | null) => {
             upsertPriceAction(plu, price === null || isNaN(price) ? null : price);
-        }, 500),
-        []
+             toast({
+                title: "Preço Salvo!",
+                description: `O preço do produto com PLU ${plu} foi atualizado.`,
+            });
+        }, 800),
+        [toast]
     );
 
     const handlePriceChange = (plu: string, value: string) => {
-        const price = value === '' ? null : parseFloat(value);
+        const price = value === '' ? null : parseFloat(value.replace(',', '.'));
         setPrices(prev => ({ ...prev, [plu]: price }));
         debouncedSave(plu, price);
     };
@@ -90,40 +96,41 @@ export default function PrecificacaoPage() {
                 </div>
                 <div className="flex-1 border rounded-lg overflow-hidden">
                     <ScrollArea className="h-full">
-                        <table className="w-full text-sm text-left">
-                            <thead className="bg-muted text-muted-foreground sticky top-0 z-10">
-                                <tr>
-                                    <th className="p-3 w-16"></th>
-                                    <th className="p-3 w-1/4">Código (PLU)</th>
-                                    <th className="p-3 w-3/4">Produto</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {!isLoaded && [...Array(20)].map((_, i) => (
-                                    <tr key={i} className="border-t">
-                                        <td className="p-2"><Skeleton className="h-8 w-8" /></td>
-                                        <td className="p-2"><Skeleton className="h-6 w-full" /></td>
-                                        <td className="p-2"><Skeleton className="h-6 w-full" /></td>
-                                    </tr>
-                                ))}
-                                {isLoaded && filteredProducts.map((product, index) => (
-                                    <tr key={product.id} className={`border-t ${index % 2 === 0 ? 'bg-white' : 'bg-muted/50'}`}>
-                                        <td className="p-2 text-center">
-                                            <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => handleGenerateBarcode(product)}>
-                                                <Barcode className="h-4 w-4" />
-                                            </Button>
-                                        </td>
-                                        <td className="p-3 font-medium">{product.plu}</td>
-                                        <td className="p-3 font-medium">{product.title}</td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                         {isLoaded && filteredProducts.length === 0 && (
-                            <div className="p-4 text-center text-muted-foreground">
-                                {searchTerm ? "Nenhum produto encontrado." : "Nenhum produto cadastrado."}
-                            </div>
-                        )}
+                         <div className="p-4 space-y-2">
+                            {!isLoaded && [...Array(20)].map((_, i) => (
+                                <div key={i} className="flex items-center justify-between gap-2 rounded-md border bg-muted/50 p-2">
+                                    <Skeleton className="h-8 w-full" />
+                                </div>
+                            ))}
+                            {isLoaded && filteredProducts.map((product) => (
+                                <div key={product.id} className="flex items-center justify-between gap-2 rounded-md border bg-muted/50 p-2">
+                                    <div className="flex items-center gap-2 truncate flex-1">
+                                        <Button variant="ghost" size="icon" className="h-8 w-8 flex-shrink-0" onClick={() => handleGenerateBarcode(product)}>
+                                            <Barcode className="h-5 w-5" />
+                                        </Button>
+                                        <div className="truncate">
+                                            <p className="font-medium text-sm truncate">{product.plu} - {product.title.toUpperCase()}</p>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-center gap-2 w-32">
+                                        <span className="text-sm font-medium text-muted-foreground">R$</span>
+                                        <Input
+                                            type="text"
+                                            inputMode="decimal"
+                                            value={prices[product.plu]?.toLocaleString('pt-BR', { minimumFractionDigits: 2 }) ?? ''}
+                                            onChange={(e) => handlePriceChange(product.plu, e.target.value)}
+                                            className="w-full h-8 text-right"
+                                            placeholder="0,00"
+                                        />
+                                    </div>
+                                </div>
+                            ))}
+                            {isLoaded && filteredProducts.length === 0 && (
+                                <div className="p-4 text-center text-muted-foreground">
+                                    {searchTerm ? "Nenhum produto encontrado." : "Nenhum produto cadastrado."}
+                                </div>
+                            )}
+                        </div>
                     </ScrollArea>
                 </div>
             </div>
