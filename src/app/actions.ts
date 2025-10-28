@@ -8,7 +8,7 @@ import {
 } from '@/ai/flows/generate-strong-password';
 import { sql } from '@vercel/postgres';
 import { revalidatePath } from 'next/cache';
-import type { Note, Balance } from '@/lib/types';
+import type { Note, Balance, Price } from '@/lib/types';
 import { setupDatabase } from '@/lib/db';
 
 export async function generatePasswordAction(input: GenerateStrongPasswordInput): Promise<GenerateStrongPasswordOutput> {
@@ -51,6 +51,7 @@ export async function addNoteAction(note: Omit<Note, 'id' | 'createdAt' >) {
     revalidatePath('/preco-livre-diario');
     revalidatePath('/anotacoes');
     revalidatePath('/acessos');
+    revalidatePath('/precificacao');
   } catch (error) {
     console.error('Failed to add note:', error);
     throw new Error('Failed to add note.');
@@ -73,6 +74,7 @@ export async function updateNoteAction(id: string, note: Partial<Omit<Note, 'id'
         revalidatePath('/preco-livre-diario');
         revalidatePath('/anotacoes');
         revalidatePath('/acessos');
+        revalidatePath('/precificacao');
     } catch (error) {
         console.error('Failed to update note:', error);
         throw new Error('Failed to update note.');
@@ -94,6 +96,7 @@ export async function deleteNoteAction(id: string) {
         revalidatePath('/preco-livre-diario');
         revalidatePath('/anotacoes');
         revalidatePath('/acessos');
+        revalidatePath('/precificacao');
     } catch (error) {
         console.error('Failed to delete note:', error);
         throw new Error('Failed to delete note.');
@@ -117,6 +120,7 @@ export async function clearAndReseedDatabase() {
     revalidatePath('/preco-livre-diario');
     revalidatePath('/anotacoes');
     revalidatePath('/acessos');
+    revalidatePath('/precificacao');
     
     return { success: true };
   } catch (error) {
@@ -153,5 +157,35 @@ export async function upsertBalanceAction(plu: string, kg: number | null, date: 
     } catch (error) {
         console.error('Failed to upsert balance:', error);
         throw new Error('Failed to upsert balance.');
+    }
+}
+
+// Price actions
+export async function fetchPrices(): Promise<Price[]> {
+    try {
+        const { rows } = await sql<Price>`SELECT * FROM prices`;
+        return rows;
+    } catch (error) {
+        console.error('Failed to fetch prices:', error);
+        if ((error as any).code === '42P01') { // table does not exist
+            console.log('Table prices not found, returning empty');
+            return [];
+        }
+        throw new Error('Failed to fetch prices.');
+    }
+}
+
+export async function upsertPriceAction(plu: string, price: number | null) {
+    try {
+        await sql`
+            INSERT INTO prices (plu, price)
+            VALUES (${plu}, ${price})
+            ON CONFLICT (plu)
+            DO UPDATE SET price = EXCLUDED.price, "updatedAt" = NOW()`;
+
+        revalidatePath('/precificacao');
+    } catch (error) {
+        console.error('Failed to upsert price:', error);
+        throw new Error('Failed to upsert price.');
     }
 }
