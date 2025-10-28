@@ -5,23 +5,15 @@ import { useState, useMemo } from 'react';
 import { useNotesStore } from '@/hooks/use-notes-store';
 import type { Note } from '@/lib/types';
 import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Search, Barcode } from 'lucide-react';
+import { Search } from 'lucide-react';
 import BarcodeGeneratorDialog from '@/components/barcode-generator-dialog';
 import { ScrollArea } from '@/components/ui/scroll-area';
 
 export default function PrecificacaoPage() {
     const { notes, isLoaded: notesLoaded } = useNotesStore();
-    const [isLoaded, setIsLoaded] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedProduct, setSelectedProduct] = useState<({plu: string} & Note) | null>(null);
-
-    useState(() => {
-        if(notesLoaded) {
-            setIsLoaded(true);
-        }
-    });
 
     const products = useMemo(() => {
         return notes
@@ -71,14 +63,13 @@ export default function PrecificacaoPage() {
                                 </div>
                             ))}
                             {notesLoaded && filteredProducts.map((product) => (
-                                <div key={product.id} className="flex items-center justify-between gap-2 rounded-md border bg-muted/50 p-2">
-                                    <div className="flex items-center gap-2 truncate flex-1">
-                                        <Button variant="ghost" size="icon" className="h-8 w-8 flex-shrink-0" onClick={() => handleGenerateBarcode(product)}>
-                                            <Barcode className="h-5 w-5" />
-                                        </Button>
-                                        <div className="truncate">
-                                            <p className="font-medium text-sm truncate">{product.plu} - {product.title.toUpperCase()}</p>
-                                        </div>
+                                <div 
+                                    key={product.id} 
+                                    className="flex items-center justify-between gap-2 rounded-md border bg-muted/50 p-3 cursor-pointer hover:bg-accent hover:text-accent-foreground transition-colors"
+                                    onClick={() => handleGenerateBarcode(product)}
+                                >
+                                    <div className="truncate">
+                                        <p className="font-medium text-sm truncate">{product.plu} - {product.title.toUpperCase()}</p>
                                     </div>
                                 </div>
                             ))}
