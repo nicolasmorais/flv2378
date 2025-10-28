@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useEffect, useRef } from 'react';
@@ -89,7 +88,6 @@ export default function BarcodeGeneratorDialog({ isOpen, onOpenChange, product }
         </div>
         <DialogFooter>
           <Button type="button" variant="ghost" onClick={() => onOpenChange(false)}>Fechar</Button>
-          <Button type="button" onClick={handlePrint}>Imprimir</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
