@@ -125,6 +125,7 @@ export async function clearAndReseedDatabase() {
   }
 }
 
+
 // Balance actions
 export async function fetchBalancesByDate(date: string): Promise<Balance[]> {
     try {
