@@ -30,11 +30,11 @@ const Barcode = ({ value, isMobile }: { value: string, isMobile: boolean }) => {
         JsBarcode(svgRef.current, value, {
           format: "CODE128",
           lineColor: "#000",
-          width: isMobile ? 3 : 2,
-          height: isMobile ? 120 : 100,
+          width: isMobile ? 4 : 3,
+          height: isMobile ? 160 : 120,
           displayValue: true,
           fontOptions: "bold",
-          fontSize: isMobile ? 24 : 18,
+          fontSize: isMobile ? 32 : 24,
         });
       } catch (e) {
         console.error("Error generating barcode:", e);
@@ -54,24 +54,6 @@ export default function BarcodeGeneratorDialog({ isOpen, onOpenChange, product }
   
   if (!product) {
     return null;
-  }
-
-  const handlePrint = () => {
-    const svgElement = document.getElementById('barcode-svg-container');
-    if (svgElement) {
-        const printWindow = window.open('', '', 'height=400,width=800');
-        if (printWindow) {
-            printWindow.document.write('<html><head><title>Imprimir Código de Barras</title>');
-            printWindow.document.write('<style>@media print { body { margin: 0; display: flex; justify-content: center; align-items: center; height: 100%; } @page { size: auto; margin: 10mm; } svg { width: 90%; height: auto; } }</style>');
-            printWindow.document.write('</head><body>');
-            printWindow.document.write(svgElement.innerHTML);
-            printWindow.document.write('</body></html>');
-            printWindow.document.close();
-            printWindow.focus();
-            printWindow.print();
-            printWindow.close();
-        }
-    }
   }
 
   return (
