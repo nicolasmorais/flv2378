@@ -4,7 +4,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { Home, Leaf, Apple, Carrot, CalendarDays, LogOut, Package, Scissors, Notebook, KeyRound, Scale, LayoutDashboard, List } from 'lucide-react';
+import { Home, Leaf, Apple, Carrot, CalendarDays, LogOut, Package, Scissors, Notebook, KeyRound, Scale, LayoutDashboard, List, Barcode } from 'lucide-react';
 import {
   SidebarHeader,
   SidebarContent,
