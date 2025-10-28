@@ -183,7 +183,6 @@ export async function upsertPriceAction(plu: string, price: number | null) {
             ON CONFLICT (plu)
             DO UPDATE SET price = EXCLUDED.price, "updatedAt" = NOW()`;
 
-        revalidatePath('/precificacao');
     } catch (error) {
         console.error('Failed to upsert price:', error);
         throw new Error('Failed to upsert price.');

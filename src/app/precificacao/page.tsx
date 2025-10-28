@@ -95,8 +95,7 @@ export default function PrecificacaoPage() {
                                 <tr>
                                     <th className="p-3 w-16"></th>
                                     <th className="p-3 w-1/4">Código (PLU)</th>
-                                    <th className="p-3 w-1/2">Produto</th>
-                                    <th className="p-3 w-1/4">Preço (R$)</th>
+                                    <th className="p-3 w-3/4">Produto</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -105,7 +104,6 @@ export default function PrecificacaoPage() {
                                         <td className="p-2"><Skeleton className="h-8 w-8" /></td>
                                         <td className="p-2"><Skeleton className="h-6 w-full" /></td>
                                         <td className="p-2"><Skeleton className="h-6 w-full" /></td>
-                                        <td className="p-2"><Skeleton className="h-8 w-full" /></td>
                                     </tr>
                                 ))}
                                 {isLoaded && filteredProducts.map((product, index) => (
@@ -117,16 +115,6 @@ export default function PrecificacaoPage() {
                                         </td>
                                         <td className="p-3 font-medium">{product.plu}</td>
                                         <td className="p-3 font-medium">{product.title}</td>
-                                        <td className="p-2">
-                                            <Input
-                                                type="number"
-                                                value={prices[product.plu] ?? ''}
-                                                onChange={(e) => handlePriceChange(product.plu, e.target.value)}
-                                                className="w-full h-8 text-center"
-                                                placeholder="R$"
-                                                step="0.01"
-                                            />
-                                        </td>
                                     </tr>
                                 ))}
                             </tbody>
