@@ -1,41 +1,27 @@
 
 'use client';
 
-import { useState, useEffect, useMemo, useCallback } from 'react';
+import { useState, useMemo } from 'react';
 import { useNotesStore } from '@/hooks/use-notes-store';
-import { fetchPrices, upsertPriceAction } from '@/app/actions';
-import type { Note, Price } from '@/lib/types';
+import type { Note } from '@/lib/types';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Search, Barcode } from 'lucide-react';
-import { debounce } from 'lodash';
 import BarcodeGeneratorDialog from '@/components/barcode-generator-dialog';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { useToast } from '@/hooks/use-toast';
 
 export default function PrecificacaoPage() {
     const { notes, isLoaded: notesLoaded } = useNotesStore();
-    const [prices, setPrices] = useState<Record<string, number | null>>({});
     const [isLoaded, setIsLoaded] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedProduct, setSelectedProduct] = useState<({plu: string} & Note) | null>(null);
-    const { toast } = useToast();
 
-    useEffect(() => {
-        const loadData = async () => {
-            if (notesLoaded) {
-                const fetchedPrices = await fetchPrices();
-                const pricesMap: Record<string, number | null> = {};
-                fetchedPrices.forEach(p => {
-                    pricesMap[p.plu] = p.price;
-                });
-                setPrices(pricesMap);
-                setIsLoaded(true);
-            }
-        };
-        loadData();
-    }, [notesLoaded]);
+    useState(() => {
+        if(notesLoaded) {
+            setIsLoaded(true);
+        }
+    });
 
     const products = useMemo(() => {
         return notes
@@ -58,24 +44,6 @@ export default function PrecificacaoPage() {
         );
     }, [products, searchTerm]);
     
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    const debouncedSave = useCallback(
-        debounce((plu: string, price: number | null) => {
-            upsertPriceAction(plu, price === null || isNaN(price) ? null : price);
-             toast({
-                title: "Preço Salvo!",
-                description: `O preço do produto com PLU ${plu} foi atualizado.`,
-            });
-        }, 800),
-        [toast]
-    );
-
-    const handlePriceChange = (plu: string, value: string) => {
-        const price = value === '' ? null : parseFloat(value.replace(',', '.'));
-        setPrices(prev => ({ ...prev, [plu]: price }));
-        debouncedSave(plu, price);
-    };
-    
     const handleGenerateBarcode = (product: ({plu: string} & Note)) => {
         setSelectedProduct(product);
     };
@@ -97,12 +65,12 @@ export default function PrecificacaoPage() {
                 <div className="flex-1 border rounded-lg overflow-hidden">
                     <ScrollArea className="h-full">
                          <div className="p-4 space-y-2">
-                            {!isLoaded && [...Array(20)].map((_, i) => (
+                            {!notesLoaded && [...Array(20)].map((_, i) => (
                                 <div key={i} className="flex items-center justify-between gap-2 rounded-md border bg-muted/50 p-2">
                                     <Skeleton className="h-8 w-full" />
                                 </div>
                             ))}
-                            {isLoaded && filteredProducts.map((product) => (
+                            {notesLoaded && filteredProducts.map((product) => (
                                 <div key={product.id} className="flex items-center justify-between gap-2 rounded-md border bg-muted/50 p-2">
                                     <div className="flex items-center gap-2 truncate flex-1">
                                         <Button variant="ghost" size="icon" className="h-8 w-8 flex-shrink-0" onClick={() => handleGenerateBarcode(product)}>
@@ -112,20 +80,9 @@ export default function PrecificacaoPage() {
                                             <p className="font-medium text-sm truncate">{product.plu} - {product.title.toUpperCase()}</p>
                                         </div>
                                     </div>
-                                    <div className="flex items-center gap-2 w-32">
-                                        <span className="text-sm font-medium text-muted-foreground">R$</span>
-                                        <Input
-                                            type="text"
-                                            inputMode="decimal"
-                                            value={prices[product.plu]?.toLocaleString('pt-BR', { minimumFractionDigits: 2 }) ?? ''}
-                                            onChange={(e) => handlePriceChange(product.plu, e.target.value)}
-                                            className="w-full h-8 text-right"
-                                            placeholder="0,00"
-                                        />
-                                    </div>
                                 </div>
                             ))}
-                            {isLoaded && filteredProducts.length === 0 && (
+                            {notesLoaded && filteredProducts.length === 0 && (
                                 <div className="p-4 text-center text-muted-foreground">
                                     {searchTerm ? "Nenhum produto encontrado." : "Nenhum produto cadastrado."}
                                 </div>
