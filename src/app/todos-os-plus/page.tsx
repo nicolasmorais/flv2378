@@ -82,17 +82,17 @@ export default function TodosOsPlusPage() {
                                 return (
                                 <div key={product.id} className="flex items-center justify-between gap-2 rounded-md border bg-muted/50 p-2">
                                     <div className="flex items-center gap-2 truncate">
-                                    <div className="flex items-center">
-                                            <span className="w-8 text-sm font-medium text-muted-foreground">#{index + 1}</span>
-                                        </div>
-                                    <div className="truncate">
-                                        <span className="font-medium text-sm">{plu} - {product.title.toUpperCase()}</span>
-                                    </div>
-                                    </div>
-                                    <div className="flex items-center gap-1">
                                         <Button variant="ghost" size="icon" className="h-7 w-7 flex-shrink-0" onClick={() => handleGenerateBarcode(product)}>
                                             <Barcode className="h-4 w-4" />
                                         </Button>
+                                        <div className="flex items-center">
+                                            <span className="w-8 text-sm font-medium text-muted-foreground">#{index + 1}</span>
+                                        </div>
+                                        <div className="truncate">
+                                            <span className="font-medium text-sm">{plu} - {product.title.toUpperCase()}</span>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-center gap-1">
                                         <Button variant="ghost" size="icon" className="h-7 w-7 flex-shrink-0" onClick={() => handleCopy(plu)}>
                                             {copiedPlu === plu ? <Check className="h-4 w-4 text-green-500" /> : <Copy className="h-4 w-4" />}
                                         </Button>
